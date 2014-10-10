@@ -1,0 +1,8 @@
+* solvetrace file /home/optimi/bzfviger/OPTI/scip/check/results/CBC_mik-250-1-100-1.gms.solvetrace: ID = CBC.1 OrigInst = bzfviger.benchmark.35_mik-250-1-100-1._optimi_kombadon_bzfviger_gams24.1.1_gams.CBC.opt.solvetracecbc Instance = mik-250-1-100-1
+* fields are lineNum, seriesID, node, seconds, bestFound, bestBound
+1, S, 0, 0.192745, -34769, -79842.42363
+2, T, 0, 1.93435, -60526, -79842.42363
+3, T, 27, 2.94611, -66389, -69121.67543
+4, T, 546174, 359.389, -66729, -69121.67543
+5, E, 546174, 359.396, -66729, -66729
+* solvetrace file closed

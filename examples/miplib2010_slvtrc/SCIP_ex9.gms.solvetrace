@@ -1,0 +1,18 @@
+* solvetrace file /home/optimi/bzfviger/OPTI/scip/check/results/SCIP_ex9.gms.solvetrace: ID = SCIP.1 OrigInst = bzfviger.benchmark.23_ex9._optimi_kombadon_bzfviger_gams24.1.1_gams.SCIP.opt.solvetracescip Instance = ex9
+* fields are lineNum, seriesID, node, seconds, bestFound, bestBound
+1, S, 0, 0.209478, na, na
+2, T, 0, 1.28596, na, na
+3, T, 0, 2.29403, na, na
+4, T, 0, 3.30967, na, na
+5, T, 0, 4.31533, na, na
+6, T, 0, 5.34224, na, na
+7, T, 0, 6.3736, na, na
+8, T, 0, 7.38371, na, na
+9, T, 0, 8.4757, na, na
+10, T, 0, 9.58138, na, na
+11, T, 0, 10.6564, na, na
+12, T, 0, 11.7035, na, na
+13, T, 0, 12.7038, na, na
+14, T, 0, 13.7162, na, na
+15, E, 1, 14.3985, 81, 81
+* solvetrace file closed

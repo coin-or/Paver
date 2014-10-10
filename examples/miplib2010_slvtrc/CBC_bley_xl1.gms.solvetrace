@@ -1,0 +1,19 @@
+* solvetrace file /home/optimi/bzfviger/OPTI/scip/check/results/CBC_bley_xl1.gms.solvetrace: ID = CBC.1 OrigInst = bzfviger.benchmark.12_bley_xl1._optimi_kombadon_bzfviger_gams24.1.1_gams.CBC.opt.solvetracecbc Instance = bley_xl1
+* fields are lineNum, seriesID, node, seconds, bestFound, bestBound
+1, S, 0, 309.799, na, 167.2255
+2, T, 0, 311.369, na, 167.2255
+3, T, 0, 318.731, 210, 167.2255
+4, T, 0, 327, 210, 167.2255
+5, T, 0, 384.113, 210, 189.0190771
+6, T, 1, 391.32, 210, 189.0190771
+7, T, 2, 405.499, 210, 189.0190771
+8, T, 3, 411.194, 210, 189.0190771
+9, T, 4, 414.475, 210, 189.0190771
+10, T, 5, 417.366, 210, 189.0190771
+11, T, 6, 421.914, 210, 189.0190771
+12, T, 7, 426.92, 210, 189.0190771
+13, T, 8, 434.399, 210, 189.0190771
+14, T, 9, 435.619, 210, 189.0190771
+15, T, 9, 438.244, 190, 189.0190771
+16, E, 9, 443.896, 190, 190
+* solvetrace file closed

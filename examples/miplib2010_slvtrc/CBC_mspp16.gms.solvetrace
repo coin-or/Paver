@@ -1,0 +1,5 @@
+* solvetrace file /home/optimi/bzfviger/OPTI/scip/check/results/CBC_mspp16.gms.solvetrace: ID = CBC.1 OrigInst = bzfviger.benchmark.39_mspp16._optimi_kombadon_bzfviger_gams24.1.1_gams.CBC.opt.solvetracecbc Instance = mspp16
+* fields are lineNum, seriesID, node, seconds, bestFound, bestBound
+1, S, 0, 2145.11, na, 341
+2, E, 0, 2145.11, na, 341
+* solvetrace file closed

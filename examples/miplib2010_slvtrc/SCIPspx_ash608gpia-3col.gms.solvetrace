@@ -1,0 +1,17 @@
+* solvetrace file /home/optimi/bzfviger/OPTI/scip/check/results/SCIPspx_ash608gpia-3col.gms.solvetrace: ID = SCIP_spx.1 OrigInst = bzfviger.benchmark.6_ash608gpia-3col._optimi_kombadon_bzfviger_gams24.1.1_gams.SCIP.opt.solvetracescipspx Instance = ash608gpia-3col
+* fields are lineNum, seriesID, node, seconds, bestFound, bestBound
+1, S, 0, 0.230015, na, na
+2, T, 1, 1.46931, na, 0
+3, T, 1, 32.4341, na, 3
+4, T, 1, 33.7271, na, 3
+5, T, 1, 37.1109, na, 3
+6, T, 2, 40.5041, na, 3
+7, T, 3, 43.7161, na, 3
+8, T, 5, 47.6893, na, 3
+9, T, 6, 50.696, na, 3
+10, T, 6, 53.7819, na, 3
+11, T, 6, 60.064, na, 3
+12, T, 8, 63.003, na, 3
+13, T, 8, 69.6276, na, na
+14, E, 8, 69.6428, na, na
+* solvetrace file closed

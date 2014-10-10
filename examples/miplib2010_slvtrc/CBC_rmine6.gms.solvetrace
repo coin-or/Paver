@@ -1,0 +1,15 @@
+* solvetrace file /home/optimi/bzfviger/OPTI/scip/check/results/CBC_rmine6.gms.solvetrace: ID = CBC.1 OrigInst = bzfviger.benchmark.74_rmine6._optimi_kombadon_bzfviger_gams24.1.1_gams.CBC.opt.solvetracecbc Instance = rmine6
+* fields are lineNum, seriesID, node, seconds, bestFound, bestBound
+1, S, 0, 2.41665, na, -462.3056616
+2, T, 0, 3.72558, na, -462.3056616
+3, T, 0, 5.3559, -453.028972, -462.3056616
+4, T, 0, 6.88346, -456.733933, -462.3056616
+5, T, 0, 10.9253, -456.733933, -461.0449115
+6, T, 2, 12.1829, -456.733933, -461.0449115
+7, T, 4, 13.4521, -456.733933, -461.0449115
+8, T, 7, 14.6707, -456.733933, -461.0449115
+9, T, 28, 15.6767, -456.733933, -461.0449115
+10, T, 42, 16.747, -456.733933, -461.0449115
+11, T, 198610, 1854.5, -457.18614, -461.0449115
+12, E, 198610, 1854.7, -457.18614, -457.18614
+* solvetrace file closed

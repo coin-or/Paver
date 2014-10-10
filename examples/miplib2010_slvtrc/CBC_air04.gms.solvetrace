@@ -1,0 +1,12 @@
+* solvetrace file /home/optimi/bzfviger/OPTI/scip/check/results/CBC_air04.gms.solvetrace: ID = CBC.1 OrigInst = bzfviger.benchmark.4_air04._optimi_kombadon_bzfviger_gams24.1.1_gams.CBC.opt.solvetracecbc Instance = air04
+* fields are lineNum, seriesID, node, seconds, bestFound, bestBound
+1, S, 0, 6.80538, na, 55535.43639
+2, T, 0, 10.2879, na, 55535.43639
+3, T, 0, 14.9275, 56499, 55535.43639
+4, T, 0, 18.0864, 56499, 55613.33203
+5, T, 6, 19.1341, 56499, 55613.33203
+6, T, 20, 20.2636, 56499, 55613.33203
+7, T, 49, 21.2776, 56138, 55613.33203
+8, T, 374, 39.4032, 56137, 55613.33203
+9, E, 374, 39.4559, 56137, 56137
+* solvetrace file closed

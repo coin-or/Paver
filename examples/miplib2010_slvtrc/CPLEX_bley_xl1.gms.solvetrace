@@ -1,0 +1,17 @@
+* miptrace file /home/optimi/bzfviger/OPTI/scip/check/results/CPLEX_bley_xl1.gms.solvetrace: ID = Cplex 12.5.0.1 Instance = bley_xl1
+* fields are lineNum, seriesID, node, seconds, bestFound, bestBound
+1, S, 0, 0.577, na, na
+2, N, 0, 5.726, na, 0
+3, T, 0, 5.726, na, 0
+4, N, 0, 6.559, na, 186.339
+5, N, 0, 6.559, na, 186.339
+6, N, 0, 6.589, 230, 186.339
+7, N, 0, 7.146, 230, 186.339
+8, T, 0, 7.146, 230, 186.339
+9, N, 0, 7.149, 230, 188.534
+10, N, 0, 7.171, 220, 188.534
+11, N, 0, 7.837, 220, 188.534
+12, N, 0, 7.84, 220, 190
+13, N, 0, 7.873, 210, 190
+14, E, 0, 7.986, 190, 190
+* miptrace file /home/optimi/bzfviger/OPTI/scip/check/results/CPLEX_bley_xl1.gms.solvetrace closed

@@ -1,0 +1,14 @@
+* miptrace file /home/optimi/bzfviger/OPTI/scip/check/results/CPLEX_acc-tight5.gms.solvetrace: ID = Cplex 12.5.0.1 Instance = acc-tight5
+* fields are lineNum, seriesID, node, seconds, bestFound, bestBound
+1, S, 0, 0.104, na, na
+2, N, 0, 0.687, na, 0
+3, N, 0, 0.687, na, 0
+4, N, 0, 0.708, na, 0
+5, N, 0, 2.205, na, 0
+6, T, 0, 2.205, na, 0
+7, T, 9, 3.222, na, 0
+8, T, 17, 4.267, na, 0
+9, T, 22, 5.321, na, 0
+10, T, 35, 6.344, na, 0
+11, E, 38, 6.45, 0, 0
+* miptrace file /home/optimi/bzfviger/OPTI/scip/check/results/CPLEX_acc-tight5.gms.solvetrace closed

@@ -1,0 +1,5 @@
+* solvetrace file /home/optimi/bzfviger/OPTI/scip/check/results/CBC_tanglegram2.gms.solvetrace: ID = CBC.1 OrigInst = bzfviger.benchmark.82_tanglegram2._optimi_kombadon_bzfviger_gams24.1.1_gams.CBC.opt.solvetracecbc Instance = tanglegram2
+* fields are lineNum, seriesID, node, seconds, bestFound, bestBound
+1, S, 1, 4.69344, na, 14.99999999
+2, E, 2, 5.30555, 443, 443
+* solvetrace file closed

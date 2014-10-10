@@ -1,0 +1,9 @@
+* solvetrace file /home/optimi/bzfviger/OPTI/scip/check/results/SCIPspx_tanglegram2.gms.solvetrace: ID = SCIP_spx.1 OrigInst = bzfviger.benchmark.82_tanglegram2._optimi_kombadon_bzfviger_gams24.1.1_gams.SCIP.opt.solvetracescipspx Instance = tanglegram2
+* fields are lineNum, seriesID, node, seconds, bestFound, bestBound
+1, S, 0, 0.00953913, 4490, na
+2, T, 1, 1.77956, 1295, 13.75
+3, T, 1, 5.13478, 1295, 13.75
+4, T, 2, 6.41416, 1295, 52.75
+5, T, 3, 7.63219, 443, 52.75
+6, E, 3, 7.64091, 443, 443
+* solvetrace file closed

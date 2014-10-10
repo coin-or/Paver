@@ -1,0 +1,24 @@
+* miptrace file /home/optimi/bzfviger/OPTI/scip/check/results/CPLEX_tanglegram1.gms.solvetrace: ID = Cplex 12.5.0.1 Instance = tanglegram1
+* fields are lineNum, seriesID, node, seconds, bestFound, bestBound
+1, S, 0, 0.118, na, na
+2, N, 0, 0.658, 34059, 0
+3, N, 0, 0.659, 34059, 0
+4, N, 0, 0.821, 7470, 0
+5, N, 0, 1.771, 7470, 0
+6, T, 0, 1.771, 7470, 0
+7, N, 0, 1.79, 7470, 7.75
+8, N, 0, 2.602, 7470, 7.75
+9, N, 0, 2.62, 7470, 16
+10, N, 0, 3.249, 7470, 16
+11, T, 0, 3.249, 7470, 16
+12, N, 0, 3.268, 7470, 23.25
+13, N, 0, 3.45, 7449, 23.25
+14, N, 0, 4.002, 7449, 23.25
+15, N, 0, 4.02, 7449, 28.85
+16, N, 0, 4.717, 7449, 28.85
+17, T, 0, 4.717, 7449, 28.85
+18, N, 0, 4.736, 7449, 34.4375
+19, N, 0, 6.009, 6759, 544.5
+20, T, 0, 6.009, 6759, 544.5
+21, E, 46, 6.311, 5182, 5182
+* miptrace file /home/optimi/bzfviger/OPTI/scip/check/results/CPLEX_tanglegram1.gms.solvetrace closed

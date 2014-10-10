@@ -1,0 +1,33 @@
+* miptrace file /home/optimi/bzfviger/OPTI/scip/check/results/CPLEX_ns1688347.gms.solvetrace: ID = Cplex 12.5.0.1 Instance = ns1688347
+* fields are lineNum, seriesID, node, seconds, bestFound, bestBound
+1, S, 0, 0.028, na, na
+2, N, 0, 1.197, na, 22
+3, T, 0, 1.197, na, 22
+4, N, 0, 1.197, na, 22
+5, N, 0, 1.289, na, 22
+6, N, 0, 1.834, na, 22
+7, N, 0, 1.836, na, 23
+8, N, 0, 2.083, na, 23
+9, N, 0, 2.084, na, 23
+10, N, 0, 2.584, na, 23
+11, T, 0, 2.584, na, 23
+12, N, 0, 2.585, na, 23
+13, N, 0, 2.704, na, 23
+14, N, 0, 2.705, na, 23
+15, N, 0, 4.536, na, 23
+16, T, 0, 4.536, na, 23
+17, T, 29, 5.613, na, 23
+18, T, 38, 6.745, na, 23
+19, T, 66, 7.794, 28, 23
+20, T, 87, 8.979, 27, 23
+21, T, 95, 10.498, 27, 23
+22, N, 100, 11.522, 27, 23
+23, T, 100, 11.522, 27, 23
+24, T, 105, 12.595, 27, 23
+25, T, 115, 13.674, 27, 23
+26, T, 134, 14.751, 27, 23
+27, T, 165, 15.821, 27, 24
+28, T, 184, 16.852, 27, 25
+29, N, 200, 16.921, 27, 26
+30, E, 214, 16.944, 27, 27
+* miptrace file /home/optimi/bzfviger/OPTI/scip/check/results/CPLEX_ns1688347.gms.solvetrace closed

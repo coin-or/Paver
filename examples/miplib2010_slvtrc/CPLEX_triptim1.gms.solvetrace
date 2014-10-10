@@ -1,0 +1,14 @@
+* miptrace file /home/optimi/bzfviger/OPTI/scip/check/results/CPLEX_triptim1.gms.solvetrace: ID = Cplex 12.5.0.1 Instance = triptim1
+* fields are lineNum, seriesID, node, seconds, bestFound, bestBound
+1, S, 0, 0.129, na, na
+2, N, 0, 32.77, na, 22.8681
+3, T, 0, 32.77, na, 22.8681
+4, N, 0, 32.771, na, 22.8681
+5, N, 0, 48.3, na, 22.8681
+6, T, 0, 48.3, na, 22.8681
+7, N, 0, 48.32, na, 22.8681
+8, N, 0, 70.266, na, 22.8681
+9, T, 0, 70.266, na, 22.8681
+10, N, 0, 70.284, na, 22.8681
+11, E, 0, 85.046, 22.8681, 22.8681
+* miptrace file /home/optimi/bzfviger/OPTI/scip/check/results/CPLEX_triptim1.gms.solvetrace closed

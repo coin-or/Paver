@@ -1,0 +1,10 @@
+* miptrace file /home/optimi/bzfviger/OPTI/scip/check/results/CPLEX_ash608gpia-3col.gms.solvetrace: ID = Cplex 12.5.0.1 Instance = ash608gpia-3col
+* fields are lineNum, seriesID, node, seconds, bestFound, bestBound
+1, S, 0, 0.139, na, na
+2, N, 0, 6.819, na, 3
+3, T, 0, 6.819, na, 3
+4, N, 0, 6.819, na, 3
+5, N, 0, 18.777, na, 3
+6, T, 0, 18.777, na, 3
+7, E, 0, 18.788, na, 1e+75
+* miptrace file /home/optimi/bzfviger/OPTI/scip/check/results/CPLEX_ash608gpia-3col.gms.solvetrace closed

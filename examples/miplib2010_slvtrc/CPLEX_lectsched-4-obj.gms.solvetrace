@@ -1,0 +1,23 @@
+* miptrace file /home/optimi/bzfviger/OPTI/scip/check/results/CPLEX_lectsched-4-obj.gms.solvetrace: ID = Cplex 12.5.0.1 Instance = lectsched-4-obj
+* fields are lineNum, seriesID, node, seconds, bestFound, bestBound
+1, S, 0, 0.061, na, na
+2, N, 0, 0.444, 180, 3
+3, N, 0, 0.444, 180, 3
+4, N, 0, 0.657, 180, 3
+5, N, 0, 0.66, 180, 4
+6, N, 0, 0.749, 180, 4
+7, N, 0, 0.751, 180, 4
+8, N, 0, 0.882, 180, 4
+9, N, 0, 0.885, 180, 4
+10, N, 0, 0.922, 180, 4
+11, N, 0, 0.925, 180, 4
+12, N, 0, 0.973, 16, 4
+13, N, 0, 1.006, 16, 4
+14, T, 0, 1.006, 16, 4
+15, N, 0, 1.009, 16, 4
+16, N, 0, 1.197, 14, 4
+17, N, 100, 1.429, 9, 4
+18, N, 200, 1.632, 5, 4
+19, N, 300, 1.911, 5, 4
+20, E, 330, 1.963, 4, 4
+* miptrace file /home/optimi/bzfviger/OPTI/scip/check/results/CPLEX_lectsched-4-obj.gms.solvetrace closed

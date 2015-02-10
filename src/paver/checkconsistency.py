@@ -177,8 +177,8 @@ class ConsistencyCheck :
         
         for sr in paver.solvedata :
             for i in paver.instancedata.index :
-                paver.addSolveAttribute(i, sr[0], sr[1], 'Fail', False);
-                paver.addSolveAttribute(i, sr[0], sr[1], 'FailReason', "");
+                paver.addSolveAttribute(i, sr.split('@')[0], sr.split('@')[1], 'Fail', False);
+                paver.addSolveAttribute(i, sr.split('@')[0], sr.split('@')[1], 'FailReason', "");
         
         paver.instancedata['Fail'] = False;
         paver.instancedata['FailReason'] = "";

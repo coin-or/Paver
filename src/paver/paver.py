@@ -75,7 +75,7 @@ class Paver :
     - column: instance attributes (#variables, best known bounds, ...)
     
     The solvedata is a Pandas Panel with
-    - items: the (solver,run) pair as multiindex
+    - items: the solver@run pair as string
     - major_axis: instance names
     - minor_axis: solve attributes (solve time, #nodes, best bounds, ...)
     '''
@@ -132,12 +132,12 @@ class Paver :
     def addSolverRun(self, solver, run) :
         '''Make a solver run known to PAVER.'''
         
-        if (solver, run) not in self.solvedata :
+        if solver+'@'+run not in self.solvedata :
             # add a new data frame for this solver
             #midx = pd.MultiIndex.from_tuples([(solver, run)], names = ['Solver', 'Run']);
             #print midx;
             #self.solvedata[midx[0]] = pd.DataFrame(index = self.solvedata.major_axis, columns = self.solvedata.minor_axis);
-            self.solvedata[solver, run] = pd.DataFrame(index = self.solvedata.major_axis, columns = self.solvedata.minor_axis);
+            self.solvedata[solver+'@'+run] = pd.DataFrame(index = self.solvedata.major_axis, columns = self.solvedata.minor_axis);
             
     def addInstanceAttribute(self, instance, attrname, attrvalue = None) :
         '''Adds an attribute for an instance.
@@ -193,22 +193,22 @@ class Paver :
             assert solver is not None;
             assert run is not None;
             assert instance is not None;
-            if np.isnan(self.solvedata[solver, run][attrname][instance]) :
+            if np.isnan(self.solvedata[solver+'@'+run][attrname][instance]) :
                 # replace NaN by attrvalue
-                self.solvedata[solver, run][attrname][instance] = attrvalue;
+                self.solvedata[solver+'@'+run][attrname][instance] = attrvalue;
             else :
                 # already have an entry, assert that we try to set to the same value
-                assert self.solvedata[solver, run][attrname][instance] == attrvalue;
+                assert self.solvedata[solver+'@'+run][attrname][instance] == attrvalue;
                 
     def hasSolveAttributes(self, instance, solver, run) :
         '''Indicates whether some solve attribute is already set for a particular instance and solver run.'''
         
-        if (solver, run) not in self.solvedata :
+        if solver+'@'+run not in self.solvedata :
             return False;
         if not self.hasInstance(instance) :
             return False;
         
-        return self.solvedata[solver, run].loc[instance].count() > 0;        
+        return self.solvedata[solver+'@'+run].loc[instance].count() > 0;        
                 
     def addSolveTrace(self, instance, solver, run, solvetrace):
         '''Stores a solve trace for a solver run on an instance.
@@ -227,7 +227,7 @@ class Paver :
         '''Returns a set with the solver names (without runnames) from the solvedata.'''
         solvers = set();
         for sr in self.solvedata.items :
-            solvers.add(sr[0]);
+            solvers.add(sr.split('@')[0]);
         return solvers;
     
     def _updateKnownPrimalBound(self) :
@@ -351,8 +351,9 @@ class Paver :
             for idx, row in solvetrace.iterrows() :
                 
                 time = row['Time'];
-                #if not time >= lasttime :
-                #    raise BaseException('Time running backwards in solvetrace for solver ' + solver + ' run ' + run + ' instance ' + instance + ': from ' + str(lasttime) + ' to ' + str(time));
+                if not time >= lasttime :
+                    print 'Warning: Time running backwards in solvetrace for solver ' + solver + ' run ' + run + ' instance ' + instance + ': from ' + str(lasttime) + ' to ' + str(time) + ': Ignoring.';
+                    continue;
                 assert time >= lasttime;
                 
                 if 'PrimalBound' in row :
@@ -408,7 +409,7 @@ class Paver :
 
         # if we have just one run, just copy that one
         if len(solverruns) == 1 :
-            self.aggrsolvedata[solver] = self.solvedata[solverruns[0]];
+            self.aggrsolvedata[solver] = self.solvedata[solverruns[0][0] + '@' + solverruns[0][1]];
             return;
 
         self.aggrsolvedata[solver] = pd.DataFrame(index = self.solvedata.major_axis, columns = self.solvedata.minor_axis);
@@ -428,14 +429,15 @@ class Paver :
         '''
         # couldn't get multiindex work properly, especially when transposing the panel
         solvers = set();
-        for solver, _ in self.solvedata.items :
-            solvers.add(solver);
+        for solverrun in self.solvedata.items :
+            solvers.add(solverrun.split('@')[0]);
                 
         self.aggrsolvedata = pd.Panel(items = solvers, major_axis = self.solvedata.major_axis, minor_axis = self.solvedata.minor_axis);
         
         for solver in solvers :
             solverruns = [];
-            for s, r in self.solvedata.items :
+            for sr in self.solvedata.items :
+                [s,r] = sr.split('@');
                 if s != solver :
                     continue;
                 solverruns.append((s, r));
@@ -449,7 +451,7 @@ class Paver :
         selector = self._setup.getInstanceSelector(self);
         if selector is not None :
             self.aggrsolvedata = self.aggrsolvedata.select(selector, axis=1) ;
-            paver.instancedata = paver.instancedata.reindex(self.aggrsolvedata.major_axis);
+            self.instancedata = self.instancedata.reindex(self.aggrsolvedata.major_axis);
             self.aggregated = True;
             
  
@@ -596,7 +598,8 @@ class Paver :
             print >> index, '<P>';
             table = [HTML.TableRow(['Solver', 'Run'], header = True)];
             prevsolver = None;
-            for solver, run in self.solvedata.items :
+            for solverrun in self.solvedata.items :
+                [solver, run] = solverrun.split('@');
                 if solver != prevsolver :
                     table.append([solver, run]);
                 else :
@@ -607,8 +610,8 @@ class Paver :
             # print solver names
             print >> index, '<P>';
             table = [HTML.TableRow(['Solver'], header = True)];
-            for solver, run in self.solvedata.items :
-                table.append([solver]);
+            for solverrun in self.solvedata.items :
+                table.append([solverrun.split('@')[0]]);
             print >> index, HTML.Table(table);
             print >> index, '</P>';
 

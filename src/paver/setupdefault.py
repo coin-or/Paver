@@ -313,9 +313,12 @@ class PaverSetup :
         if paver.hasSolveAttribute('PrimalDualIntegral') and not ignoredualbounds :
             m = metric.Metric('Efficiency', 'PrimalDualIntegral');
             m.clip_lower = paver.options['mintime'];
+            m.shift = paver.options['timeshift'];
             m.failvalue = paver.options['failtime'];
             if m.failvalue is not None :
                 m.clip_upper = m.failvalue;
+            m.reltol = paver.options['timerelimpr'];
+            m.abstol = paver.options['mintime'];
             m.filter = [filterallnofail];
             m.ppfilter = [filternofail];
             m.ppextended = 'extendedprofiles' in paver.options and paver.options['extendedprofiles'];
@@ -343,9 +346,12 @@ class PaverSetup :
         if paver.hasSolveAttribute('PrimalIntegral') and filterallnofailknownopt is not None:
             m = metric.Metric('Efficiency', 'PrimalIntegral');
             m.clip_lower = paver.options['mintime'];
+            m.shift = paver.options['timeshift'];
             m.failvalue = paver.options['failtime'];
             if m.failvalue is not None :
                 m.clip_upper = m.failvalue;
+            m.reltol = paver.options['timerelimpr'];
+            m.abstol = paver.options['mintime'];
             m.filter = [filterallnofailknownopt];
             m.ppfilter = [filternofail];
             m.ppextended = 'extendedprofiles' in paver.options and paver.options['extendedprofiles'];
@@ -373,9 +379,12 @@ class PaverSetup :
         if paver.hasSolveAttribute('DualIntegral') and not ignoredualbounds and filterallnofailknownopt is not None :
             m = metric.Metric('Efficiency', 'DualIntegral');
             m.clip_lower = paver.options['mintime'];
+            m.shift = paver.options['timeshift'];
             m.failvalue = paver.options['failtime'];
             if m.failvalue is not None :
                 m.clip_upper = m.failvalue;
+            m.reltol = paver.options['timerelimpr'];
+            m.abstol = paver.options['mintime'];
             m.filter = [filterallnofailknownopt];
             m.ppfilter = [filternofail];
             m.ppextended = 'extendedprofiles' in paver.options and paver.options['extendedprofiles'];

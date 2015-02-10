@@ -284,7 +284,7 @@ class StatisticsGenerator():
             
             # skip statistics if there are 0's in the reference values
             ratiotoref = None;
-            if not haszero[refsolver] :
+            if (not haszero[refsolver]) and ('bool' not in fdf.get_dtype_counts()) :
                 ratiotoref = fdf.div(fdf[refsolver], axis=0);
                 #print ratiotoref.to_string();
             

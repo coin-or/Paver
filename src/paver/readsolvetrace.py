@@ -49,15 +49,15 @@ def read(f, paver, **attribs) :
                 
                 # see if we find a solver name which matches our solverid (case insensitive) or at least starts with the same name
                 for sr in paver.solvedata.items :
-                    s = sr[0];
+                    s = sr.split('@')[0];
                 
                     if s.upper() == solverid :
                         solver = s;
-                        runname = sr[1];
+                        runname = sr.split('@')[1];
                         break;
-                    elif s.upper().startswith(solverid) :
+                    elif s.upper().startswith(solverid) or solverid.startswith(s.upper()) :
                         solver = s;
-                        runname = sr[1];
+                        runname = sr.split('@')[1];
                 
                 if solver is None :
                     raise BaseException('Do not have solver with name ' + solverid);

@@ -3,7 +3,7 @@
 # use 900s if solver failed
 # reduce mintime to 0.1s, which fits better to local solvers
 # disable examiner checks for feasibility and optimality
-python ../src/paver/paver.py \
+python2.7 ../src/paver/paver.py \
   globallib/dasher.trc \
   globallib/dancer.trc \
   globallib/comet.trc \
@@ -16,9 +16,8 @@ python ../src/paver/paver.py \
   --ccfeastol inf \
   --writehtml globallib.localExamNo
 
-
 # as before, but enable examiner checks for feasibility/optimality
-python ../src/paver/paver.py \
+python2.7 ../src/paver/paver.py \
   globallib/dasher.trc \
   globallib/dancer.trc \
   globallib/comet.trc \

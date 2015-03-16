@@ -38,6 +38,7 @@ class PaverSetup :
     _defaultfailnodes = None;
     _defaultgaptol = 1e-6;
     _defaultevalgap = [0.01, 0.1];
+    _defaultfiltertime = 10.0;
     _defaulttimerelimpr = 0.1;
     _defaultboundrelimpr = 0.1;
     
@@ -71,6 +72,8 @@ class PaverSetup :
                             help = 'maximal allowed relative gap for solved instances (default: ' + str(self._defaultgaptol) + ')');
         parser.add_argument('--evalgap', action = 'append', type = float, default = None,
                             help = 'gap for which to evaluate performance additionally (default: ' + str(self._defaultevalgap) + ')');
+        parser.add_argument('--filtertime', action = 'store', type = float, default = self._defaultfiltertime,
+                            help = 'add evaluation on only those instances where at least one solver took at least FILTERTIME seconds (default: ' + str(self._defaultfiltertime) + ')');
         parser.add_argument('--timerelimpr', action = 'store', type = float, default = self._defaulttimerelimpr,
                             help = 'minimal relative improvement of time for being better (default: ' + str(self._defaulttimerelimpr) + ')');
         parser.add_argument('--boundrelimpr', action = 'store', type = float, default = self._defaultboundrelimpr,
@@ -127,6 +130,8 @@ class PaverSetup :
             paver.options['timerelimpr'] = self._defaulttimerelimpr;
         if 'boundrelimpr' not in paver.options :
             paver.options['boundrelimpr'] = self._defaultboundrelimpr;
+        if 'filtertime' not in paver.options :
+            paver.options['filtertime'] = self._defaultfiltertime;
         
         metrics = [];
 
@@ -199,6 +204,15 @@ class PaverSetup :
                 f.name = "dual gap <= " + str(100*g) + "% and not failed";
                 filtermaxdualgap.append(f);
         
+        # get instances with a certain minimal (max) solving time and no fail
+        filterminmaxtime = (paver.aggrsolvedata.loc[:, :, 'SolverTime'].max(axis = 1) >= paver.options['filtertime'])[filterallnofail].reindex_like(filterallnofail).fillna(False);
+        filterminmaxtime.name = 'time >= ' + str(paver.options['filtertime']) + ' by at least one solver and no fail for all solvers';
+
+        # get instances with a certain minimal (max) solving time and no fail and known optimal value
+        if filterallnofailknownopt is not None :
+           filterminmaxtimeknownopt = filterminmaxtime & filterallnofailknownopt;
+           filterminmaxtimeknownopt.name = 'time >= ' + str(paver.options['filtertime']) + ' by at least one solver and no fail for all solvers and known optimal value';
+ 
         m = metric.Metric('Status', 'Fail');
         filterfails = fails.copy();
         filterfails[paver.instancedata['Fail']] = True;
@@ -238,8 +252,8 @@ class PaverSetup :
             m.clip_upper = m.failvalue;
         m.reltol = paver.options['timerelimpr'];
         m.abstol = paver.options['mintime'];
-        m.filter = [None, filterallnofail] + filterallmaxgap + filterallmaxprimgap;
-        m.ppfilter = [filternofail] + filtermaxgap + filtermaxprimgap;
+        m.filter = [None, filterallnofail, filterminmaxtime] + filterallmaxgap + filterallmaxprimgap;
+        m.ppfilter = [filternofail, filterminmaxtime] + filtermaxgap + filtermaxprimgap;
         m.ppabsolute = True;
         m.ppextended = 'extendedprofiles' in paver.options and paver.options['extendedprofiles'];
         metrics.append(m);
@@ -252,7 +266,7 @@ class PaverSetup :
             if m.failvalue is not None :
                 m.clip_upper = m.failvalue;
             m.reltol = 0.1;
-            m.filter = [filterallnofail];
+            m.filter = [filterallnofail, filterminmaxtime];
             if len(filterallmaxgap) > 0 :
                 # w.r.t. all solved instances
                 m.filter.append(filterallmaxgap[0]);
@@ -268,7 +282,7 @@ class PaverSetup :
             #if m.failvalue is not None :
             #    m.clip_upper = m.failvalue;
             m.reltol = 0.1;
-            m.filter = [filterallnofail];
+            m.filter = [filterallnofail, filterminmaxtime];
             if len(filterallmaxgap) > 0 :
                 # w.r.t. all solved instances
                 m.filter.append(filterallmaxgap[0]);
@@ -304,7 +318,7 @@ class PaverSetup :
                 m.reltol = float(ueval['relimpr']);
             else :
                 m.reltol = 0.1;
-            m.filter = [None, filterallnofail] + filterallmaxgap + filterallmaxprimgap;
+            m.filter = [None, filterallnofail, filterminmaxtime] + filterallmaxgap + filterallmaxprimgap;
             m.ppfilter = [filternofail] + filtermaxgap + filtermaxprimgap;
             m.ppextended = 'extendedprofiles' in paver.options and paver.options['extendedprofiles'];
             
@@ -319,7 +333,7 @@ class PaverSetup :
                 m.clip_upper = m.failvalue;
             m.reltol = paver.options['timerelimpr'];
             m.abstol = paver.options['mintime'];
-            m.filter = [filterallnofail];
+            m.filter = [filterallnofail, filterminmaxtime];
             m.ppfilter = [filternofail];
             m.ppextended = 'extendedprofiles' in paver.options and paver.options['extendedprofiles'];
             metrics.append(m);
@@ -329,7 +343,7 @@ class PaverSetup :
             m = metric.Metric('Solution Quality', 'Gap');
             m.clip_lower = 0;
             m.clip_upper = 2.0;
-            m.filter = [filterallnofail];
+            m.filter = [filterallnofail, filterminmaxtime];
             m.ppfilter = [filternofail];
             m.ppabsolute = True;
             m.pprelative = False;
@@ -352,7 +366,7 @@ class PaverSetup :
                 m.clip_upper = m.failvalue;
             m.reltol = paver.options['timerelimpr'];
             m.abstol = paver.options['mintime'];
-            m.filter = [filterallnofailknownopt];
+            m.filter = [filterallnofailknownopt, filterminmaxtimeknownopt];
             m.ppfilter = [filternofail];
             m.ppextended = 'extendedprofiles' in paver.options and paver.options['extendedprofiles'];
             metrics.append(m);
@@ -362,7 +376,7 @@ class PaverSetup :
             m = metric.Metric('Solution Quality', 'PrimalGap');
             m.clip_lower = 0;
             m.clip_upper = 2.0;
-            m.filter = [filterallnofailknownopt];
+            m.filter = [filterallnofailknownopt, filterminmaxtimeknownopt];
             m.ppfilter = [filternofail];
             m.ppabsolute = True;
             m.pprelative = False;
@@ -385,7 +399,7 @@ class PaverSetup :
                 m.clip_upper = m.failvalue;
             m.reltol = paver.options['timerelimpr'];
             m.abstol = paver.options['mintime'];
-            m.filter = [filterallnofailknownopt];
+            m.filter = [filterallnofailknownopt, filterminmaxtimeknownopt];
             m.ppfilter = [filternofail];
             m.ppextended = 'extendedprofiles' in paver.options and paver.options['extendedprofiles'];
             metrics.append(m);
@@ -395,7 +409,7 @@ class PaverSetup :
             m = metric.Metric('Solution Quality', 'DualGap');
             m.clip_lower = 0;
             m.clip_upper = 2.0;
-            m.filter = [filterallnofailknownopt];
+            m.filter = [filterallnofailknownopt, filterminmaxtimeknownopt];
             metrics.append(m);
             
             # counts on instance within a certain dual gap
@@ -408,7 +422,7 @@ class PaverSetup :
 
         if paver.hasSolveAttribute('PrimalBound') :
             m = metric.Metric('Solution Quality', 'PrimalBound');
-            m.filter = [filterallnofail];
+            m.filter = [filterallnofail, filterminmaxtime];
             m.multbydirection = True;
             m.means = False;
             m.quantiles = [];
@@ -418,7 +432,7 @@ class PaverSetup :
         
         if havedualbound :
             m = metric.Metric('Solution Quality', 'DualBound');
-            m.filter = [filterallnofail];
+            m.filter = [filterallnofail, filterminmaxtime];
             m.multbydirection = True;
             m.betterisup = True;
             m.means = False;

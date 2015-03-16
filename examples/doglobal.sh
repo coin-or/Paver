@@ -3,7 +3,7 @@
 # use 900s if solver failed
 # reduce mintime to 0.1s, which fits better to local solvers
 # disable examiner checks for optimality
-python ../src/paver/paver.py \
+python2.7 ../src/paver/paver.py \
   globallib/blitzen.trc \
   globallib/comet.trc \
   globallib/dasher.trc \

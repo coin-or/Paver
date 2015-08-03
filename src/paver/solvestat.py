@@ -140,6 +140,8 @@ def addCommandLineOptions(parser) :
                         help = 'disables virtual solvers in all statistics');
     parser.add_argument('--refsolver', action = 'append', default = [],
                         help = 'reference solver (default: None)');
+    parser.add_argument('--nosortsolver', action = 'store_true',
+                        help = 'disable sorting of solvers by name');
 
 class StatisticsGenerator():
     '''Computes and stores solve statistics based on the aggregated solving data and a given set of performance metrics.'''
@@ -185,7 +187,6 @@ class StatisticsGenerator():
         
         # apply filter and drop rows that are complete NaN
         fdf = df[f].dropna(how = 'all').convert_objects(convert_numeric=True);
-        fdf.sort(axis=1, inplace=True);
         
         # fill remaining NaN's with na value (only does something if f was a dataframe, too)
         if metric.navalue is not None :
@@ -521,6 +522,10 @@ class StatisticsGenerator():
             for solver in paver.aggrsolvedata.items :
                 if solver in paver.options['refsolver'] :
                     refsolvers.append(solver);
+                    
+        sortcolumns = True;
+        if 'nosortsolver' in paver.options :
+           sortcolumns = not paver.options['nosortsolver'];
         
         self._results = {};
         for metric in self._metrics :
@@ -541,6 +546,10 @@ class StatisticsGenerator():
             # clip inside given interval
             assert metric.clip_lower <= metric.clip_upper;
             df = df.clip(metric.clip_lower, metric.clip_upper);
+
+            if sortcolumns :
+               # sort columns (solver names)
+               df.sort(axis=1, inplace=True);
 
             # statistics for each filter
             for f in metric.filter :

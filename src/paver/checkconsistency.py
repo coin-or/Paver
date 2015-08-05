@@ -105,8 +105,8 @@ class CheckBounds :
                     failed[df1['Fail']] = False;
                     failed[df2['Fail']] = False;
                     
-                    paver.instancedata['Fail'][failed] = True;
-                    paver.instancedata['FailReason'][failed] += 'Dual bound of ' + str(sr1) + ' contradicts primal bound of ' + str(sr2);
+                    paver.instancedata.loc[failed,'Fail'] = True;
+                    paver.instancedata.loc[failed,'FailReason'] += 'Dual bound of ' + str(sr1) + ' contradicts primal bound of ' + str(sr2);
             
                     count += failed.sum();
                      

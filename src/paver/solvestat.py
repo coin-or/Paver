@@ -33,7 +33,7 @@ def _calculateProfile(paver, data, minabscissa = None, maxabscissa = None, logab
     
     # setup ticks for profile
     if minabscissa == maxabscissa :
-        ticks = [minabscissa];
+        raise BaseException("Minimal and maximal attribute values are equal.");
     else :
         # distribute numpts ticks in [minabscissa : maxabscissa + a bit]
         ticks = np.empty(numpts);
@@ -187,6 +187,10 @@ class StatisticsGenerator():
         
         # apply filter and drop rows that are complete NaN
         fdf = df[f].dropna(how = 'all').convert_objects(convert_numeric=True);
+
+        #if len(fdf.index) == 0 :
+        #   print 'No data left to evaluate attribute', metric.attribute, 'after applying filter "' + f.name + '". Skipping statistics.';
+        #   return
         
         # fill remaining NaN's with na value (only does something if f was a dataframe, too)
         if metric.navalue is not None :
@@ -419,7 +423,15 @@ class StatisticsGenerator():
         # print f.name, f.count();
         
         # apply filter
-        fdf = df[f];
+        fdf = df[f].copy();
+        
+        if len(fdf.index) == 0 :
+           print 'No data left to evaluate attribute', metric.attribute, 'after applying filter "' + f.name + '". Skipping profiles.';
+           return
+           
+        if fdf.min().min() == fdf.max().max() :
+           print 'Attribute', metric.attribute, 'is the same for all instances and solvers after applying filter "' + f.name + '". Skipping profiles.';
+           return
     
         if metric.ppextended :
             # for each solver run, compute best among all other solvers (for each instance)
@@ -784,7 +796,7 @@ class StatisticsGenerator():
                 # boxplot
                 if outcome.metric.boxplot :
                     plt.clf();
-                    outcome.data.boxplot();
+                    outcome.data.boxplot(return_type = 'axes');
                     plt.title(outcome.metric.attribute + '\nFilter: ' + outcome.filter.name);
                     
                     plotfile = fileprefix + 'boxplot{0:03d}'.format(count);
@@ -917,7 +929,7 @@ class StatisticsGenerator():
                 # boxplot
                 if outcome.metric.boxplot and data is not None:
                     plt.clf();
-                    data.boxplot();
+                    data.boxplot(return_type = 'axes');
                     plt.title(outcome.metric.attribute + ' w.r.t. ' + str(refsolver) + '\nFilter: ' + outcome.filter.name);
                     
                     plotfile = fileprefix + 'boxplot{0:03d}_'.format(count) + str(refsolver).translate(None, " ()',");

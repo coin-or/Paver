@@ -273,7 +273,7 @@ class Paver :
                 for sr, df in self.solvedata.iteritems() :
                     df['PrimalGap'] = utils.computeGap((self.instancedata['Direction'] * df['PrimalBound']).fillna(np.inf), self.instancedata['Direction'] * self.instancedata['KnownPrimalBound'], tol = zerogaptol);
                     # only have primal gap if best primal bound is optimal
-                    df['PrimalGap'][self.instancedata['KnownPrimalBound'] != self.instancedata['KnownDualBound']] = np.nan;
+                    df.loc[self.instancedata['KnownPrimalBound'] != self.instancedata['KnownDualBound'], 'PrimalGap'] = np.nan;
                     self.solvedata[sr] = df;
 
             if self.hasSolveAttribute('DualBound') :
@@ -282,7 +282,7 @@ class Paver :
                 for sr, df in self.solvedata.iteritems() :
                     df['DualGap'] = utils.computeGap(self.instancedata['Direction'] * self.instancedata['KnownDualBound'], (self.instancedata['Direction'] * df['DualBound']).fillna(-np.inf), tol = zerogaptol);
                     # only have dual gap if best dual bound is optimal
-                    df['DualGap'][self.instancedata['KnownPrimalBound'] != self.instancedata['KnownDualBound']] = np.nan;
+                    df.loc[self.instancedata['KnownPrimalBound'] != self.instancedata['KnownDualBound'], 'DualGap'] = np.nan;
                     self.solvedata[sr] = df;
                     
     def _evaluateSolvetraces(self):
@@ -466,6 +466,13 @@ class Paver :
             extension = None;
             
         if isinstance(filename, str) :
+            atpos = filename.rfind('@');
+            if atpos >= 0 :
+               solvername = filename[atpos+1:];
+               filename = filename[:atpos];
+               if len(solvername) == 0 :
+                  solvername = filename;
+               attribs['solvername'] = solvername ;
             if extension is None :
                 dotpos = filename.rfind('.');
                 if dotpos >= 0 :
@@ -687,9 +694,9 @@ class Paver :
 def setupArgumentParser(paversetup) :
     '''Sets up command line argument parsers.'''
     parser = argparse.ArgumentParser(description = 'Python Performance Analysis and Visualization for Efficient Reproducibility', fromfile_prefix_chars = '@');
-    parser.add_argument('file', type = str, help = 'input file', nargs = '*', default = []);
+    parser.add_argument('file', type = str, help = 'input file (see also --tracefile and --solufile)', nargs = '*', default = []);
     parser.add_argument('--setup', type = str, help = 'paver setup file');
-    parser.add_argument('--tracefile', type = str, help = 'GAMS trace file', action = 'append', default = []);
+    parser.add_argument('--tracefile', type = str, help = 'GAMS trace file (specify <filename>@<solvername> to overwrite solvername, or <filename>@ to use filename as solvername)', action = 'append', default = []);
     parser.add_argument('--solufile', type = str, help = 'SCIP solution file', action = 'append', default = []);
     parser.add_argument('--writetext', type = str, default = DEFAULTWRITETEXT,
                         help = 'directory where to write results in text format (default: ' + str(DEFAULTWRITETEXT) + ')');

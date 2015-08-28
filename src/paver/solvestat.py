@@ -8,6 +8,10 @@ import math;
 
 import utils;
 
+# disable warning on future change in return_type for boxplot()
+import warnings;
+warnings.simplefilter(action = "ignore", category = FutureWarning);
+
 DEFAULTNUMPTS = 40;
 
 def _calculateProfile(paver, data, minabscissa = None, maxabscissa = None, logabscissa = True) :
@@ -796,7 +800,7 @@ class StatisticsGenerator():
                 # boxplot
                 if outcome.metric.boxplot :
                     plt.clf();
-                    outcome.data.boxplot(return_type = 'axes');
+                    outcome.data.boxplot(); # return_type = 'axes'
                     plt.title(outcome.metric.attribute + '\nFilter: ' + outcome.filter.name);
                     
                     plotfile = fileprefix + 'boxplot{0:03d}'.format(count);
@@ -929,7 +933,7 @@ class StatisticsGenerator():
                 # boxplot
                 if outcome.metric.boxplot and data is not None:
                     plt.clf();
-                    data.boxplot(return_type = 'axes');
+                    data.boxplot(); #return_type = 'axes'
                     plt.title(outcome.metric.attribute + ' w.r.t. ' + str(refsolver) + '\nFilter: ' + outcome.filter.name);
                     
                     plotfile = fileprefix + 'boxplot{0:03d}_'.format(count) + str(refsolver).translate(None, " ()',");

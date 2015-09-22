@@ -3,8 +3,10 @@
 import numpy as np;
 import pandas as pd;
 import matplotlib.pyplot as plt;
+import matplotlib.lines;
 import os;
 import math;
+import itertools;
 
 import utils;
 
@@ -62,7 +64,7 @@ def _calculateProfile(paver, data, minabscissa = None, maxabscissa = None, logab
     return profile;
 
     
-def _barchart(data, datamax = None) :
+def _barchart(data, datamax = None, bw = False) :
     '''Create a matplotlib barchart for given data.'''
     #data.drop(['virt. best', 'virt. worst']).plot(kind = 'bar');
     
@@ -92,12 +94,12 @@ def _barchart(data, datamax = None) :
     yerr = None;
     #if meantype == 'arith' :
     #    yerr = devs.drop(['virt. best', 'virt. worst']);
-    rects = plt.bar(barstart, realdata, 0.8, yerr = yerr, ecolor = 'r');
+    rects = plt.bar(barstart, realdata, 0.8, yerr = yerr, color = 'k' if bw else 'b');
     
     if 'virt. best' in data :
-        plt.plot([0, nsolvers+0.1], [data['virt. best'], data['virt. best']], label = 'virt. best');
+        plt.plot([0, nsolvers+0.1], [data['virt. best'], data['virt. best']], label = 'virt. best', color = 'k' if bw else 'b');
     if 'virt. worst' in data :
-        plt.plot([0, nsolvers+0.1], [data['virt. worst'], data['virt. worst']], label = 'virt. worst');
+        plt.plot([0, nsolvers+0.1], [data['virt. worst'], data['virt. worst']], label = 'virt. worst', color = 'k' if bw else 'g', linestyle = '--' if bw else '-');
     #if meantype == 'arith' :
     #    s = {-2 : devs['virt. best'],  -1 : devs['virt. worst']};
     #    for i in [-2, -1] :  # draw error bars for virt. best/worst by hand
@@ -146,6 +148,8 @@ def addCommandLineOptions(parser) :
                         help = 'reference solver (default: None)');
     parser.add_argument('--nosortsolver', action = 'store_true',
                         help = 'disable sorting of solvers by name');
+    parser.add_argument('--bw', action = 'store_true',
+                        help = 'do graphics in black & white');
 
 class StatisticsGenerator():
     '''Computes and stores solve statistics based on the aggregated solving data and a given set of performance metrics.'''
@@ -689,7 +693,20 @@ class StatisticsGenerator():
 
     def writeHTML(self, paver, category, outdir, fileprefix) :
         '''Outputs statistics for a certain category in HTML form.'''
-                
+        
+        # whether to do black-and-white
+        bw = 'bw' in paver.options and paver.options['bw'];
+        if bw :
+            plotstyle = [];
+            for m in [''] + matplotlib.markers.MarkerStyle.markers.keys() :
+                if not isinstance(m, basestring) and m != 'None' :
+                    continue;
+                for ls in matplotlib.lines.lineStyles.keys() :
+                    if ls != 'None' and ls != ' ' :
+                        plotstyle.append('k' + ls + str(m));
+        else :
+            plotstyle = '-o';
+
         out = open(os.path.join(outdir, fileprefix + '.html'), 'w');
         print >> out, "<HTML>";
         print >> out, "<HEAD>";
@@ -765,7 +782,7 @@ class StatisticsGenerator():
                 print >> out, "<P>";
                 # if we have only a count, do a plot for this one (probably that's why we have this metric)
                 if (outcome.stat.columns == 'count').all() and len(outcome.refsolver) == 0 :
-                    _barchart(outcome.stat['count']);
+                    _barchart(outcome.stat['count'], bw = bw);
                     plt.title(outcome.metric.attribute + ' - ' + outcome.filter.name);
 
                     plotfile = fileprefix + 'count{0:03d}'.format(count);
@@ -784,7 +801,7 @@ class StatisticsGenerator():
                         if meantype + '. mean' not in outcome.stat :
                             continue;
                         
-                        _barchart(outcome.stat[meantype + '. mean']);
+                        _barchart(outcome.stat[meantype + '. mean'], bw = bw);
                         plt.title(outcome.metric.attribute + ' - ' + meantype + '. means\nFilter: ' + outcome.filter.name);
 
                         plotfile = fileprefix + meantype + 'mean{0:03d}'.format(count);
@@ -800,7 +817,14 @@ class StatisticsGenerator():
                 # boxplot
                 if outcome.metric.boxplot :
                     plt.clf();
-                    outcome.data.boxplot(); # return_type = 'axes'
+                    if bw :
+                        bp = outcome.data.boxplot(grid = False); # return_type = 'axes'
+                        plt.setp(bp['boxes'], color='black')
+                        plt.setp(bp['medians'], color='black')
+                        plt.setp(bp['whiskers'], color='black')
+                        plt.setp(bp['fliers'], color='black', marker='+')
+                    else :
+                        outcome.data.boxplot(); # return_type = 'axes'
                     plt.title(outcome.metric.attribute + '\nFilter: ' + outcome.filter.name);
                     
                     plotfile = fileprefix + 'boxplot{0:03d}'.format(count);
@@ -823,7 +847,7 @@ class StatisticsGenerator():
             if outcome.pprofilerel is not None :
                 plt.figure();
                 outcome.pprofilerel.plot(logx = outcome.metric.pprelsemilog,
-                                         style = '-o',
+                                         style = plotstyle,
                                          title = "Relative performance profile (" + outcome.metric.attribute + ")");
                 plt.xlabel(outcome.metric.attribute + ' at most this factor of best');
                 plt.ylabel('Number of instances with ' + outcome.filter.name);
@@ -842,7 +866,7 @@ class StatisticsGenerator():
             if outcome.pprofileabs is not None :
                 plt.figure();
                 outcome.pprofileabs.plot(logx = outcome.metric.ppabssemilog,
-                                         style = '-o',
+                                         style = plotstyle,
                                          title = "Absolute performance profile (" + outcome.metric.attribute + ")");
                 plt.xlabel(outcome.metric.attribute);
                 plt.ylabel('Number of instances with ' + outcome.filter.name);
@@ -861,7 +885,7 @@ class StatisticsGenerator():
             if outcome.pprofileext is not None :
                 plt.figure();
                 outcome.pprofileext.plot(logx = outcome.metric.pprelsemilog,
-                                         style = '-o',
+                                         style = plotstyle,
                                          title = "Extended performance profile (" + outcome.metric.attribute + ")");
                 plt.xlabel(outcome.metric.attribute + ' at most this factor of best excluding self');
                 plt.ylabel('Number of instances with ' + outcome.filter.name);
@@ -933,7 +957,14 @@ class StatisticsGenerator():
                 # boxplot
                 if outcome.metric.boxplot and data is not None:
                     plt.clf();
-                    data.boxplot(); #return_type = 'axes'
+                    if bw :
+                        bp = data.boxplot(grid = False); # return_type = 'axes'
+                        plt.setp(bp['boxes'], color='black')
+                        plt.setp(bp['medians'], color='black')
+                        plt.setp(bp['whiskers'], color='black')
+                        plt.setp(bp['fliers'], color='black', marker='+')
+                    else :
+                        data.boxplot(); # return_type = 'axes'
                     plt.title(outcome.metric.attribute + ' w.r.t. ' + str(refsolver) + '\nFilter: ' + outcome.filter.name);
                     
                     plotfile = fileprefix + 'boxplot{0:03d}_'.format(count) + str(refsolver).translate(None, " ()',");
@@ -952,7 +983,7 @@ class StatisticsGenerator():
                         if meantype + '. mean' not in refsolveroutcome['stat'] :
                             continue;
                         
-                        _barchart(refsolveroutcome['stat'][meantype + '. mean']);
+                        _barchart(refsolveroutcome['stat'][meantype + '. mean'], bw = bw);
                         plt.title(outcome.metric.attribute + ' w.r.t. ' + str(refsolver) + ' - ' + meantype + '. means\nFilter: '+ outcome.filter.name);
 
                         plotfile = fileprefix + meantype + 'mean{0:03d}_'.format(count) + str(refsolver).translate(None, " ()',");
@@ -968,7 +999,7 @@ class StatisticsGenerator():
                 # bar charts for number of instance close to/better than/worse than refsolver
                 for a in ['close', 'better', 'worse'] :
                     if a in refsolveroutcome['stat'] :
-                        _barchart(refsolveroutcome['stat'][a], refsolveroutcome['stat']['count']);
+                        _barchart(refsolveroutcome['stat'][a], refsolveroutcome['stat']['count'], bw = bw);
                         title = outcome.metric.attribute + ' ' + a + (' to ' if a == 'close' else ' than ') + str(refsolver) + ' (';
                         if outcome.metric.reltol is not None :
                             title += 'rel ' + '{0:.1f}%'.format(100.0*outcome.metric.reltol);

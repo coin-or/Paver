@@ -157,7 +157,7 @@ class Paver :
             if np.isnan(self.instancedata[attrname][instance]) :
                 # replace NaN by attrvalue
                 self.instancedata[attrname][instance] = attrvalue;
-            else :
+            elif not self.options['nocheckinstanceattr'] :
                 # already have an entry, assert that we try to set to the same value
                 assert self.instancedata[attrname][instance] == attrvalue;
 
@@ -710,6 +710,8 @@ def setupArgumentParser(paversetup) :
     # Paver object options
     parser.add_argument('--zerogaptol', type = float, default = DEFAULTZEROGAPTOL,
                         help = 'tolerance on bounds for zero gap (default: ' + str(DEFAULTZEROGAPTOL) + ')');
+    parser.add_argument('--nocheckinstanceattr', action = 'store_true',
+                        help = 'disables check that instance attributes are the same among different runs');
 
     solvestat.addCommandLineOptions(parser);
     paversetup.addCommandLineOptions(parser);

@@ -53,7 +53,7 @@ def _calculateProfile(paver, data, minabscissa = None, maxabscissa = None, logab
     profile = pd.DataFrame(0, index = ticks, columns = data.columns);
     for c, r in data.iteritems() :
         # order ratios for solver c
-        ordered = r.order();
+        ordered = r.sort_values();
         pos = 0;
         for t in ticks :
             # increase pos while ratio <= t
@@ -107,8 +107,8 @@ def _barchart(data, datamax = None, bw = False) :
     #        plt.plot([nsolvers+0.03 - 0.05 * (i+1), nsolvers+0.07 - 0.05 * (i+1)], [m[i]-s[i], m[i]-s[i]], color = 'r');
     #        plt.plot([nsolvers+0.03 - 0.05 * (i+1), nsolvers+0.07 - 0.05 * (i+1)], [m[i]+s[i], m[i]+s[i]], color = 'r');
 
-    plt.axes().set_xticks(ticks);
-    plt.axes().set_xticklabels(realdata.index);
+    plt.gca().set_xticks(ticks);
+    plt.gca().set_xticklabels(realdata.index);
     plt.xlim(0, nsolvers+0.15);
     #if meantype == 'arith' :
     #    plt.ylim(0, 1.1 * (m[-1] + s[-1]));
@@ -569,7 +569,7 @@ class StatisticsGenerator():
 
             if sortcolumns :
                # sort columns (solver names)
-               df.sort(axis=1, inplace=True);
+               df.sort_index(axis=1, inplace=True);
 
             # statistics for each filter
             for f in metric.filter :

@@ -483,9 +483,9 @@ class SolveDataWriter() :
         # generate bar chart
         fig = plt.figure(); # start new figure
         rects = plt.bar(barstart, heights, 0.8, color = colors, edgecolor = colors);
-        plt.axes().set_xticks(ticks);
-        plt.axes().set_xticklabels(inames, rotation = 'vertical', size = 'xx-small');
-        plt.axes().tick_params('x', length = 0);
+        plt.gca().set_xticks(ticks);
+        plt.gca().set_xticklabels(inames, rotation = 'vertical', size = 'xx-small');
+        plt.gca().tick_params('x', length = 0);
         
         # arrange size
         plt.xlim(0, len(plotdata));
@@ -499,7 +499,7 @@ class SolveDataWriter() :
         assert minheight > float("-inf");
         if minheight != maxheight :
             plt.ylim(-minheight, maxheight * 1.2);
-            plt.axes().set_aspect(0.2 * len(plotdata) / (maxheight - minheight));
+            plt.gca().set_aspect(0.2 * len(plotdata) / (maxheight - minheight));
         fig.set_figwidth(20);
 
         # put actual numbers over chart

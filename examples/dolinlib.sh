@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 python2.7 ../src/paver/paver.py \
   linlib/A.trc \
   linlib/B.trc \

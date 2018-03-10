@@ -290,11 +290,13 @@ class Paver :
         
         def _mygapFloatFloat(a, b) :
             '''Computes the gap between two numbers (always positive).'''
-            if a is None or np.isnan(a) or b is None or np.isnan(b) or a*b < 0.0 :
+            if a is None or np.isnan(a) or b is None or np.isnan(b) :
                 return 1.0;
             if a == b :
                 return 0.0;
             if np.isinf(a) or np.isinf(b) :
+                return 1.0;
+            if a*b < 0.0 :
                 return 1.0;
             return abs(a-b) / max(abs(a), abs(b));
         
@@ -318,7 +320,7 @@ class Paver :
             if 'Time' not in solvetrace :
                 continue;
             
-            solvetrace = solvetrace.sort('Time');
+            solvetrace = solvetrace.sort_values(by='Time');
             
             # check if we have an optimal value for the instance
             knownopt = None;

@@ -83,11 +83,11 @@ def _barchart(data, datamax = None, bw = False) :
         realdata = realdata.drop('virt. worst');
         nsolvers -= 1;
 
-    barstart = np.empty(nsolvers);
+    barstart = np.empty(nsolvers);  # actually middle point now
     ticks = np.empty(nsolvers);
     for s in range(nsolvers) :
-        barstart[s] = s + 0.1;
-        ticks[s] = s + 0.5;
+        barstart[s] = s;
+        ticks[s] = s;
         
     plt.clf(); # clear figure
 
@@ -97,9 +97,9 @@ def _barchart(data, datamax = None, bw = False) :
     rects = plt.bar(barstart, realdata, 0.8, yerr = yerr, color = 'k' if bw else 'b');
     
     if 'virt. best' in data :
-        plt.plot([0, nsolvers+0.1], [data['virt. best'], data['virt. best']], label = 'virt. best', color = 'k' if bw else 'b');
+        plt.plot([-0.5, nsolvers-0.5], [data['virt. best'], data['virt. best']], label = 'virt. best', color = 'k' if bw else 'b');
     if 'virt. worst' in data :
-        plt.plot([0, nsolvers+0.1], [data['virt. worst'], data['virt. worst']], label = 'virt. worst', color = 'k' if bw else 'g', linestyle = '--' if bw else '-');
+        plt.plot([-0.5, nsolvers-0.5], [data['virt. worst'], data['virt. worst']], label = 'virt. worst', color = 'k' if bw else 'g', linestyle = '--' if bw else '-');
     #if meantype == 'arith' :
     #    s = {-2 : devs['virt. best'],  -1 : devs['virt. worst']};
     #    for i in [-2, -1] :  # draw error bars for virt. best/worst by hand
@@ -109,12 +109,12 @@ def _barchart(data, datamax = None, bw = False) :
 
     plt.gca().set_xticks(ticks);
     plt.gca().set_xticklabels(realdata.index);
-    plt.xlim(0, nsolvers+0.15);
+    plt.xlim(-0.5, nsolvers-0.5);
     #if meantype == 'arith' :
     #    plt.ylim(0, 1.1 * (m[-1] + s[-1]));
     #else :
     ymin = min(0, 1.1 * data.min());
-    ymax = 1.1 * data.max();
+    ymax = 1.2 * data.max();
     if ymin == ymax :
         ymax += 1.0;
     plt.ylim(ymin, ymax);

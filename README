@@ -1,5 +1,5 @@
 PAVER 2.0: An Open Source Environment for Automated Performance Analysis of Benchmarking Data
-http://www.gamsworld.org/performance/paver2
+https://github.com/coin-or/Paver
 
 This tools is meant to simplify the task of solver performance data comparison and visualization. 
 Some description can be found in:
@@ -12,12 +12,14 @@ http://www.gamsworld.org/performance/paver2/paver2_paper.pdf
 
 Requirements:
   Python 3.x (http://www.python.org/)
-  Python NumPy package 1.6.1 or higher (http://www.numpy.org/)
-  Python matplotlib package 1.3.0 or higher (http://matplotlib.org/)
-  Python Pandas package 0.17 or higher (http://pandas.pydata.org/)
+  Python NumPy (http://www.numpy.org/)
+  Python matplotlib (http://matplotlib.org/)
+  Python Pandas (http://pandas.pydata.org/)
 
-  
+The following versions seem to work:
+  Python 3.6.6, Numpy 1.14.5, matplotlib 2.2.2, Pandas 0.23.1
+
 For help on usage, execute:
   python ./src/paver/paver.py -h
-  
+
 For examples, see do*.sh scripts in examples subdirectory.

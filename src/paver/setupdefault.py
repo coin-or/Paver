@@ -171,7 +171,7 @@ class PaverSetup :
             for g in [paver.options['gaptol']] + paver.options['evalgap'] :
                 f = (paver.aggrsolvedata.loc[:, :, 'Gap'] <= g).min(axis=1);
                 f[failsany] = False;
-                f.name = "gap <= " + str(100*g) + "% and no fail for all solvers";
+                f.name = "gap <= %.6g%% and no fail for all solvers" % (100*g);
                 filterallmaxgap.append(f);
 
         # get instances solved up to a certain gap 
@@ -179,7 +179,7 @@ class PaverSetup :
         if havegap :
             for g in [paver.options['gaptol']] + paver.options['evalgap'] :
                 f = (paver.aggrsolvedata.loc[:, :, 'Gap'] <= g)[filternofail].fillna(False).astype(np.bool);
-                f.name = "gap <= " + str(100*g) + "% and not failed";
+                f.name = "gap <= %.6g%% and not failed" % (100*g);
                 filtermaxgap.append(f);
 
         # get instances where all solvers found a solution up to a certain quality
@@ -188,7 +188,7 @@ class PaverSetup :
             for g in [paver.options['gaptol']] + paver.options['evalgap'] :
                 f = (paver.aggrsolvedata.loc[:, :, 'PrimalGap'] <= g).min(axis=1);
                 f[failsany] = False;
-                f.name = "within " + str(100*g) + "% of known optimal value and no fail for all solvers";
+                f.name = "within %.6g%% of known optimal value and no fail for all solvers" % (100*g);
                 filterallmaxprimgap.append(f);
 
         # get instances where a solution up to a certain quality was found
@@ -196,7 +196,7 @@ class PaverSetup :
         if paver.hasSolveAttribute('PrimalGap') :
             for g in [paver.options['gaptol']] + paver.options['evalgap'] :
                 f = (paver.aggrsolvedata.loc[:, :, 'PrimalGap'] <= g)[filternofail].fillna(False).astype(np.bool);
-                f.name = "within " + str(100*g) + "% of known optimal value and not failed";
+                f.name = "within %.6g%% of known optimal value and not failed" % (100*g);
                 filtermaxprimgap.append(f);
 
         # get instances with a certain dual gap
@@ -204,7 +204,7 @@ class PaverSetup :
         if havedualgap :
             for g in [paver.options['gaptol']] + paver.options['evalgap'] :
                 f = (paver.aggrsolvedata.loc[:, :, 'DualGap'] <= g)[filternofail].fillna(False).astype(np.bool);
-                f.name = "dual gap <= " + str(100*g) + "% and not failed";
+                f.name = "dual gap <= %.6g%% and not failed" % (100*g);
                 filtermaxdualgap.append(f);
         
         # get instances with a certain minimal (max) solving time and no fail

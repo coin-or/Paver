@@ -211,25 +211,25 @@ class PaverSetup :
         filterminmaxtime = (paver.aggrsolvedata.loc[:, :, 'SolverTime'].max(axis = 1) >= paver.options['filtertime'])[filterallnofail].reindex_like(filterallnofail).fillna(False);
         filterminmaxtime.name = 'time >= ' + str(paver.options['filtertime']) + ' by at least one solver and no fail for all solvers';
         if filterminmaxtime.sum() == 0 :
-           filterminmaxtime = None;
+            filterminmaxtime = None;
 
         # get instances with a certain minimal (max) solving time and no fail and known optimal value
         if filterallnofailknownopt is not None and filterminmaxtime is not None :
-           filterminmaxtimeknownopt = filterminmaxtime & filterallnofailknownopt;
-           filterminmaxtimeknownopt.name = 'time >= ' + str(paver.options['filtertime']) + ' by at least one solver and no fail for all solvers and known optimal value';
+            filterminmaxtimeknownopt = filterminmaxtime & filterallnofailknownopt;
+            filterminmaxtimeknownopt.name = 'time >= ' + str(paver.options['filtertime']) + ' by at least one solver and no fail for all solvers and known optimal value';
  
         if paver.hasSolveAttribute('NumberOfNodes') and 'filternodes' in paver.options and paver.options['filternodes'] is not None :
-           # get instances with a certain minimal (max) number of nodes and no fail
-           filterminmaxnodes = (paver.aggrsolvedata.loc[:, :, 'NumberOfNodes'].max(axis = 1) >= paver.options['filternodes'])[filterallnofail].reindex_like(filterallnofail).fillna(False);
-           filterminmaxnodes.name = 'nodes >= ' + str(paver.options['filternodes']) + ' by at least one solver and no fail for all solvers';
+            # get instances with a certain minimal (max) number of nodes and no fail
+            filterminmaxnodes = (paver.aggrsolvedata.loc[:, :, 'NumberOfNodes'].max(axis = 1) >= paver.options['filternodes'])[filterallnofail].reindex_like(filterallnofail).fillna(False);
+            filterminmaxnodes.name = 'nodes >= ' + str(paver.options['filternodes']) + ' by at least one solver and no fail for all solvers';
 
-           # get instances with a certain minimal (max) solving time and no fail and known optimal value
-           if filterallnofailknownopt is not None :
-              filterminmaxnodesknownopt = filterminmaxnodes & filterallnofailknownopt;
-              filterminmaxnodesknownopt.name = 'nodes >= ' + str(paver.options['filternodes']) + ' by at least one solver and no fail for all solvers and known optimal value';
+            # get instances with a certain minimal (max) solving time and no fail and known optimal value
+            if filterallnofailknownopt is not None :
+                filterminmaxnodesknownopt = filterminmaxnodes & filterallnofailknownopt;
+                filterminmaxnodesknownopt.name = 'nodes >= ' + str(paver.options['filternodes']) + ' by at least one solver and no fail for all solvers and known optimal value';
         else :
-           filterminmaxnodes = None;
-           filterminmaxnodesknownopt = None;
+            filterminmaxnodes = None;
+            filterminmaxnodesknownopt = None;
 
         m = metric.Metric('Status', 'Fail');
         filterfails = fails.copy();
@@ -273,11 +273,11 @@ class PaverSetup :
         m.filter = [None, filterallnofail];
         m.ppfilter = [filternofail];
         if filterminmaxtime is not None :
-           m.filter.append(filterminmaxtime);
-           m.ppfilter.append(filterminmaxtime);
+            m.filter.append(filterminmaxtime);
+            m.ppfilter.append(filterminmaxtime);
         if filterminmaxnodes is not None :
-           m.filter.append(filterminmaxnodes);
-           m.ppfilter.append(filterminmaxnodes);
+            m.filter.append(filterminmaxnodes);
+            m.ppfilter.append(filterminmaxnodes);
         m.filter += filterallmaxgap + filterallmaxprimgap;
         m.ppfilter += filtermaxgap + filtermaxprimgap;
         m.ppabsolute = True;
@@ -294,9 +294,9 @@ class PaverSetup :
             m.reltol = 0.1;
             m.filter = [filterallnofail];
             if filterminmaxtime is not None :
-               m.filter.append(filterminmaxtime);
+                m.filter.append(filterminmaxtime);
             if filterminmaxnodes is not None :
-               m.filter.append(filterminmaxnodes);
+                m.filter.append(filterminmaxnodes);
             if len(filterallmaxgap) > 0 :
                 # w.r.t. all solved instances
                 m.filter.append(filterallmaxgap[0]);
@@ -314,9 +314,9 @@ class PaverSetup :
             m.reltol = 0.1;
             m.filter = [filterallnofail];
             if filterminmaxtime is not None :
-               m.filter.append(filterminmaxtime);
+                m.filter.append(filterminmaxtime);
             if filterminmaxnodes is not None :
-               m.filter.append(filterminmaxnodes);
+                m.filter.append(filterminmaxnodes);
             if len(filterallmaxgap) > 0 :
                 # w.r.t. all solved instances
                 m.filter.append(filterallmaxgap[0]);
@@ -354,9 +354,9 @@ class PaverSetup :
                 m.reltol = 0.1;
             m.filter = [None, filterallnofail];
             if filterminmaxtime is not None :
-               m.filter.append(filterminmaxtime);
+                m.filter.append(filterminmaxtime);
             if filterminmaxnodes is not None :
-               m.filter.append(filterminmaxnodes);
+                m.filter.append(filterminmaxnodes);
             m.filter += filterallmaxgap + filterallmaxprimgap;
             m.ppfilter = [filternofail] + filtermaxgap + filtermaxprimgap;
             m.ppextended = 'extendedprofiles' in paver.options and paver.options['extendedprofiles'];
@@ -374,9 +374,9 @@ class PaverSetup :
             m.abstol = paver.options['mintime'];
             m.filter = [filterallnofail];
             if filterminmaxtime is not None :
-               m.filter.append(filterminmaxtime);
+                m.filter.append(filterminmaxtime);
             if filterminmaxnodes is not None :
-               m.filter.append(filterminmaxnodes);
+                m.filter.append(filterminmaxnodes);
             m.ppfilter = [filternofail];
             m.ppextended = 'extendedprofiles' in paver.options and paver.options['extendedprofiles'];
             metrics.append(m);
@@ -388,9 +388,9 @@ class PaverSetup :
             m.clip_upper = 2.0;
             m.filter = [filterallnofail];
             if filterminmaxtime is not None :
-               m.filter.append(filterminmaxtime);
+                m.filter.append(filterminmaxtime);
             if filterminmaxnodes is not None :
-               m.filter.append(filterminmaxnodes);
+                m.filter.append(filterminmaxnodes);
             m.ppfilter = [filternofail];
             m.ppabsolute = True;
             m.pprelative = False;
@@ -415,9 +415,9 @@ class PaverSetup :
             m.abstol = paver.options['mintime'];
             m.filter = [filterallnofailknownopt];
             if filterminmaxtimeknownopt is not None :
-               m.filter.append(filterminmaxtimeknownopt);
+                m.filter.append(filterminmaxtimeknownopt);
             if filterminmaxnodesknownopt is not None :
-               m.filter.append(filterminmaxnodesknownopt);
+                m.filter.append(filterminmaxnodesknownopt);
             m.ppfilter = [filternofail];
             m.ppextended = 'extendedprofiles' in paver.options and paver.options['extendedprofiles'];
             metrics.append(m);
@@ -429,9 +429,9 @@ class PaverSetup :
             m.clip_upper = 2.0;
             m.filter = [filterallnofailknownopt];
             if filterminmaxtimeknownopt is not None :
-               m.filter.append(filterminmaxtimeknownopt);
+                m.filter.append(filterminmaxtimeknownopt);
             if filterminmaxnodesknownopt is not None :
-               m.filter.append(filterminmaxnodesknownopt);
+                m.filter.append(filterminmaxnodesknownopt);
             m.ppfilter = [filternofail];
             m.ppabsolute = True;
             m.pprelative = False;
@@ -456,9 +456,9 @@ class PaverSetup :
             m.abstol = paver.options['mintime'];
             m.filter = [filterallnofailknownopt];
             if filterminmaxtimeknownopt is not None :
-               m.filter.append(filterminmaxtimeknownopt);
+                m.filter.append(filterminmaxtimeknownopt);
             if filterminmaxnodesknownopt is not None :
-               m.filter.append(filterminmaxnodesknownopt);
+                m.filter.append(filterminmaxnodesknownopt);
             m.ppfilter = [filternofail];
             m.ppextended = 'extendedprofiles' in paver.options and paver.options['extendedprofiles'];
             metrics.append(m);
@@ -470,9 +470,9 @@ class PaverSetup :
             m.clip_upper = 2.0;
             m.filter = [filterallnofailknownopt];
             if filterminmaxtimeknownopt is not None :
-               m.filter.append(filterminmaxtimeknownopt);
+                m.filter.append(filterminmaxtimeknownopt);
             if filterminmaxnodesknownopt is not None :
-               m.filter.append(filterminmaxnodesknownopt);
+                m.filter.append(filterminmaxnodesknownopt);
             metrics.append(m);
             
             # counts on instance within a certain dual gap
@@ -487,9 +487,9 @@ class PaverSetup :
             m = metric.Metric('Solution Quality', 'PrimalBound');
             m.filter = [filterallnofail];
             if filterminmaxtime is not None :
-               m.filter.append(filterminmaxtime);
+                m.filter.append(filterminmaxtime);
             if filterminmaxnodes is not None :
-               m.filter.append(filterminmaxnodes);
+                m.filter.append(filterminmaxnodes);
             m.multbydirection = True;
             m.means = False;
             m.quantiles = [];
@@ -501,9 +501,9 @@ class PaverSetup :
             m = metric.Metric('Solution Quality', 'DualBound');
             m.filter = [filterallnofail];
             if filterminmaxtime is not None :
-               m.filter.append(filterminmaxtime);
+                m.filter.append(filterminmaxtime);
             if filterminmaxnodes is not None :
-               m.filter.append(filterminmaxnodes);
+                m.filter.append(filterminmaxnodes);
             m.multbydirection = True;
             m.betterisup = True;
             m.means = False;

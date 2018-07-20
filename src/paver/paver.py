@@ -474,11 +474,11 @@ class Paver :
         if isinstance(filename, str) :
             atpos = filename.rfind('@');
             if atpos >= 0 :
-               solvername = filename[atpos+1:];
-               filename = filename[:atpos];
-               if len(solvername) == 0 :
-                  solvername = filename;
-               attribs['solvername'] = solvername ;
+                solvername = filename[atpos+1:];
+                filename = filename[:atpos];
+                if len(solvername) == 0 :
+                    solvername = filename;
+                attribs['solvername'] = solvername ;
             if extension is None :
                 dotpos = filename.rfind('.');
                 if dotpos >= 0 :

@@ -6,7 +6,6 @@ import matplotlib.pyplot as plt;
 import matplotlib.lines;
 import os;
 import math;
-import itertools;
 
 import utils;
 
@@ -434,12 +433,12 @@ class StatisticsGenerator():
         fdf = df[f].copy();
         
         if len(fdf.index) == 0 :
-           print('No data left to evaluate attribute', metric.attribute, 'after applying filter "' + f.name + '". Skipping profiles.');
-           return
+            print('No data left to evaluate attribute', metric.attribute, 'after applying filter "' + f.name + '". Skipping profiles.');
+            return
            
         if fdf.min().min() == fdf.max().max() :
-           print('Attribute', metric.attribute, 'is the same for all instances and solvers after applying filter "' + f.name + '". Skipping profiles.');
-           return
+            print('Attribute', metric.attribute, 'is the same for all instances and solvers after applying filter "' + f.name + '". Skipping profiles.');
+            return
     
         if metric.ppextended :
             # for each solver run, compute best among all other solvers (for each instance)
@@ -545,7 +544,7 @@ class StatisticsGenerator():
                     
         sortcolumns = True;
         if 'nosortsolver' in paver.options :
-           sortcolumns = not paver.options['nosortsolver'];
+            sortcolumns = not paver.options['nosortsolver'];
         
         self._results = {};
         for metric in self._metrics :
@@ -568,8 +567,8 @@ class StatisticsGenerator():
             df = df.clip(metric.clip_lower, metric.clip_upper);
 
             if sortcolumns :
-               # sort columns (solver names)
-               df.sort_index(axis=1, inplace=True);
+                # sort columns (solver names)
+                df.sort_index(axis=1, inplace=True);
 
             # statistics for each filter
             for f in metric.filter :

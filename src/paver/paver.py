@@ -558,7 +558,7 @@ class Paver :
         if self._solvestat is not None :
             categories = self._solvestat.getCategories();
             for c in categories :
-                ct = c.translate(None, ' ');
+                ct = c.replace(' ', '');
                 self._solvestat.writeText(c, dirname, "stat_" + ct);
         
         # print raw instance and solve data
@@ -674,7 +674,7 @@ class Paver :
             print('<UL>', file=index);
             categories = self._solvestat.getCategories();
             for c in categories :
-                ct = c.translate(None, ' ');
+                ct = c.replace(' ', '');
                 self._solvestat.writeHTML(self, c, dirname, "stat_" + ct);
                 print('<LI><a href="stat_' + ct + '.html">', c, '</a>', file=index);
                 

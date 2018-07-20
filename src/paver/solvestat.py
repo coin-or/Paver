@@ -672,7 +672,7 @@ class StatisticsGenerator():
                         df = df.combine(refsolveroutcome['worsethanref'].drop(refsolver, axis=1),
                                         lambda r, c : np.where(c, r+'-', r));
                 
-                    datafile = fileprefix + 'ratio{0:03d}_'.format(count) + str(refsolver).translate(None, " ()',") + '.txt';
+                    datafile = fileprefix + 'ratio{0:03d}_'.format(count) + str(refsolver).translate(str.maketrans('', '', " ()',")) + '.txt';
                     outdata = open(os.path.join(outdir, datafile), 'w');
                     print(df.to_string(), file=outdata);
                     outdata.close();
@@ -927,7 +927,7 @@ class StatisticsGenerator():
                         df = df.combine(refsolveroutcome['worsethanref'].drop(refsolver, axis=1),
                                         lambda r, c : np.where(c, '<span style="{color: red}">'+r+'</span>', r));
                 
-                    datafile = fileprefix + 'ratio{0:03d}_'.format(count) + str(refsolver).translate(None, " ()',") + '.html';
+                    datafile = fileprefix + 'ratio{0:03d}_'.format(count) + str(refsolver).translate(str.maketrans('', '', " ()',")) + '.html';
                     outdata = open(os.path.join(outdir, datafile), 'w');
                     print("<HTML><HEAD>", paver.htmlheader, "</HEAD><BODY>", file=outdata);
                     print(df.to_html(index_names = False, escape = False), file=outdata);
@@ -967,7 +967,7 @@ class StatisticsGenerator():
                         data.boxplot(); # return_type = 'axes'
                     plt.title(outcome.metric.attribute + ' w.r.t. ' + str(refsolver) + '\nFilter: ' + outcome.filter.name);
                     
-                    plotfile = fileprefix + 'boxplot{0:03d}_'.format(count) + str(refsolver).translate(None, " ()',");
+                    plotfile = fileprefix + 'boxplot{0:03d}_'.format(count) + str(refsolver).translate(str.maketrans('', '', " ()',"));
                     with utils.Timer() :
                         plt.savefig(os.path.join(outdir, plotfile + '.png'));
                     if paver.options['figformat'] != 'png' :
@@ -986,7 +986,7 @@ class StatisticsGenerator():
                         _barchart(refsolveroutcome['stat'][meantype + '. mean'], bw = bw);
                         plt.title(outcome.metric.attribute + ' w.r.t. ' + str(refsolver) + ' - ' + meantype + '. means\nFilter: '+ outcome.filter.name);
 
-                        plotfile = fileprefix + meantype + 'mean{0:03d}_'.format(count) + str(refsolver).translate(None, " ()',");
+                        plotfile = fileprefix + meantype + 'mean{0:03d}_'.format(count) + str(refsolver).translate(str.maketrans('', '', " ()',"));
                         with utils.Timer() :
                             plt.savefig(os.path.join(outdir, plotfile + '.png'));
                         if paver.options['figformat'] != 'png' :
@@ -1010,7 +1010,7 @@ class StatisticsGenerator():
                         title += ')\nFilter: ' + outcome.filter.name;
                         plt.title(title);
     
-                        plotfile = fileprefix + a + '{0:03d}_'.format(count) + str(refsolver).translate(None, " ()',");
+                        plotfile = fileprefix + a + '{0:03d}_'.format(count) + str(refsolver).translate(str.maketrans('', '', " ()',"));
                         with utils.Timer() :
                             plt.savefig(os.path.join(outdir, plotfile + '.png'));
                         if paver.options['figformat'] != 'png' :

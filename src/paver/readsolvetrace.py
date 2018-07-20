@@ -15,8 +15,8 @@ INTCOLS = ['lineNum', 'Node'];
 FLOATCOLS = ['Time', 'PrimalBound', 'DualBound'];
 
 if os.path.isfile('solverrename.py') :
-    print 'executing solver rename file solverrename.py'
-    execfile('solverrename.py');
+    print('executing solver rename file solverrename.py')
+    exec(compile(open('solverrename.py').read(), 'solverrename.py', 'exec'));
 else :
     solverrename = {}; # pylint: disable=C0103
 
@@ -91,7 +91,7 @@ def read(f, paver, **attribs) :
         colit = iter(cols);
         for r in line.split(',') :
             r = r.strip();
-            c = colit.next();
+            c = next(colit);
             
             if r.upper() == "NA" :
                 continue;
@@ -117,7 +117,7 @@ def read(f, paver, **attribs) :
 
     # TODO we could autocomplete with primal / dual bound and solvetime from data
     if 'seriesID' in cols and (not seenstart or not seenend) :
-        print 'Incomplete solvetrace, ignoring.'
+        print('Incomplete solvetrace, ignoring.')
         return
 
     if 'lineNum' in cols :

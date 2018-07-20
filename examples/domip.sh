@@ -1,6 +1,6 @@
 #!/bin/bash
 
-python2.7 ../src/paver/paver.py \
+python3 ../src/paver/paver.py \
   miplib2010/gimli.trc \
   miplib2010/bombur.trc \
   miplib2010/thorin.trc \

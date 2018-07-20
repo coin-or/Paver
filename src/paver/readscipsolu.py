@@ -29,18 +29,18 @@ def read(f, paver, **attribs) :
         key = r[0].strip('=');
         
         if key not in KEYS :
-            print 'ERROR: Key ' + key + ' at position ' + f.name + ':' + f.tell() + ' unknown. Ignoring line.';
+            print('ERROR: Key ' + key + ' at position ' + f.name + ':' + f.tell() + ' unknown. Ignoring line.');
             continue;
         
         if len(r) == 1 :
-            print 'ERROR: No instance name given at position ' + f.name + ':' + f.tell() + '. Ignoring line.';
+            print('ERROR: No instance name given at position ' + f.name + ':' + f.tell() + '. Ignoring line.');
             continue;
         
         i = r[1];
         
         if key in ["best", "opt", "bestdual"] :
             if len(r) == 2 :
-                print 'ERROR: No value given at position ' + f.name + ':' + f.tell() + '. Ignoring line.';
+                print('ERROR: No value given at position ' + f.name + ':' + f.tell() + '. Ignoring line.');
                 continue;
             # TODO how to check whether r[2] is indeed a float ?
             val = float(r[2]);

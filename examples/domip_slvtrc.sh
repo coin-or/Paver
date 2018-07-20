@@ -1,6 +1,6 @@
 #!/bin/bash
 
-python2.7 ../src/paver/paver.py \
+python3 ../src/paver/paver.py \
   miplib2010_slvtrc/CBC.trc \
   miplib2010_slvtrc/CPLEX.trc \
   miplib2010_slvtrc/SCIPcpx.trc \

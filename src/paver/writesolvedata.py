@@ -535,7 +535,7 @@ class SolveDataWriter() :
     def writeHTML(self, solvedata, out, chartsdir = None, plotfileprefix = '') :
         '''Generates HTML tables for PAVER instance data and given solve data.'''
         
-        print >> out, "<P>For a short description on how gaps and integrals are calculated, refer to <A href=documentation.html>the documentation</A>.</P>";
+        print("<P>For a short description on how gaps and integrals are calculated, refer to <A href=documentation.html>the documentation</A>.</P>", file=out);
         
         # print instances and solver runs
         col_align = ['left'];
@@ -672,13 +672,13 @@ class SolveDataWriter() :
 
             t.rows.append(HTML.TableRow(row, attribs = rowattribs));
         
-        print >> out, "<P>", t, "</P>";
+        print("<P>", t, "</P>", file=out);
 
         # print small statistics of instance attributes
         df1 = self._paver.instancedata.describe();
-        print >> out, "<P>Instance Attributes:<BR>";
+        print("<P>Instance Attributes:<BR>", file=out);
         df1.transpose().to_html(out, float_format = '{0:.2f}'.format);
-        print >> out, "</P>";
+        print("</P>", file=out);
         
         # print small statistics of solve attributes
         # why is this not working???
@@ -686,9 +686,9 @@ class SolveDataWriter() :
         df2 = pd.DataFrame(index = df1.index, columns = solvedata.minor_axis);
         for a in solvedata.minor_axis :
             df2[a] = solvedata.loc[:, :, a].convert_objects(convert_numeric=True).stack().describe();
-        print >> out, "<P>Solve Attributes (all solver runs):<BR>";
+        print("<P>Solve Attributes (all solver runs):<BR>", file=out);
         df2.transpose().to_html(out, float_format = '{0:.2f}'.format);
-        print >> out, "</P>"
+        print("</P>", file=out)
 
     def writeText(self, solvedata, out = sys.stdout, outattrranges = None) :
         '''Generates text tables for PAVER instance data and given solve data.'''
@@ -733,7 +733,7 @@ class SolveDataWriter() :
         line = ('{0:^' + str(instancewidth) + 's}').format('Instance') + '|';
         for sr in sorted(solvedata.items) :
             line += ('{0:^'+str(runwidth)+'s}').format(_shortenstr(str(sr), runwidth)) + '|';
-        print >> out, line;
+        print(line, file=out);
 
         # print second header row
         line = ('{0:' + str(instancenamewidth) + 's}').format('name');
@@ -752,12 +752,12 @@ class SolveDataWriter() :
             runcolstr += ('{0:' + alignchar[c.getAlign()] + str(colwidth[c]) + 's}').format(s) + ' ';
         runcolstr += 'I|';
         line += runcolstr * len(solvedata.items);
-        print >> out, line;
+        print(line, file=out);
         
         # print ---- line
         line = '-' * (instancewidth+1);
         line += '-' * len(solvedata.items) * (runwidth+1);
-        print >> out, line;
+        print(line, file=out);
 
         # print actual data
         for i in sorted(self._paver.instancedata.index) :
@@ -783,7 +783,7 @@ class SolveDataWriter() :
                     line += ' ';
                 line += '|'
 
-            print >> out, line;
+            print(line, file=out);
 
         # print small statistics of instance and solve run attributes
         if outattrranges is not None :
@@ -793,4 +793,4 @@ class SolveDataWriter() :
             df2 = pd.DataFrame(index = df1.index, columns = solvedata.minor_axis);
             for a in solvedata.minor_axis :
                 df2[a] = solvedata.loc[:, :, a].convert_objects(convert_numeric=True).stack().describe();
-            print >> outattrranges, pd.concat([df1, df2], axis=1).transpose();
+            print(pd.concat([df1, df2], axis=1).transpose(), file=outattrranges);

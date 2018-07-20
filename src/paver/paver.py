@@ -57,14 +57,14 @@ def _defaultaggrfunc(attribute, rundata) :
     
     if isinstance(rundata[0], str) :
         result = '';
-        for (_, r), d in rundata.iteritems() :
+        for (_, r), d in rundata.items() :
             if d != '' :
                 if len(result) > 0 :
                     result += ' ';
                 result += 'Run ' + str(r) + ': ' + d;
         return result;
     
-    print 'Warning: Unknown data type for attribute ' + attribute + '. Using NaN in aggregation of solver runs.';
+    print('Warning: Unknown data type for attribute ' + attribute + '. Using NaN in aggregation of solver runs.');
     return np.nan;
 
 class Paver :
@@ -243,15 +243,15 @@ class Paver :
         direction = self.instancedata['Direction'];
         knownpbs = self.instancedata['KnownPrimalBound'];
         
-        for sr, df in self.solvedata.iteritems() :
+        for sr, df in self.solvedata.items() :
             solverfails = df['Fail'];
             solverpbs = df['PrimalBound'];
-            for i, solverpb in solverpbs.iteritems() :
+            for i, solverpb in solverpbs.items() :
                 if solverfails[i] or instancefails[i] :
                     continue;
                 knownpb = knownpbs[i];
                 if (np.isnan(knownpb) or utils.isRelGT(direction[i] * knownpb, direction[i] * solverpb, 1e-6)) and not np.isinf(solverpb) :
-                    print 'Solver', sr, 'improved known primal bound for instance', i, 'from', knownpb, 'to', solverpb;
+                    print('Solver', sr, 'improved known primal bound for instance', i, 'from', knownpb, 'to', solverpb);
                     knownpbs[i] = solverpb;
         
     def _computeGaps(self) :
@@ -262,7 +262,7 @@ class Paver :
             self.addSolveAttribute(None, None, None, 'Gap', None);
             #self.solvedata[self.solvedata.items[0]]['Gap'][self.solvedata.major_axis[0]] = 42;
             
-            for sr, df in self.solvedata.iteritems() :
+            for sr, df in self.solvedata.items() :
                 df['Gap'] = utils.computeGap(self.instancedata['Direction'] * df['PrimalBound'], self.instancedata['Direction'] * df['DualBound'], tol = zerogaptol);
                 self.solvedata[sr] = df;
                 
@@ -270,7 +270,7 @@ class Paver :
             if self.hasSolveAttribute('PrimalBound') :
                 self.addSolveAttribute(None, None, None, 'PrimalGap', None);
                 
-                for sr, df in self.solvedata.iteritems() :
+                for sr, df in self.solvedata.items() :
                     df['PrimalGap'] = utils.computeGap((self.instancedata['Direction'] * df['PrimalBound']).fillna(np.inf), self.instancedata['Direction'] * self.instancedata['KnownPrimalBound'], tol = zerogaptol);
                     # only have primal gap if best primal bound is optimal
                     df.loc[self.instancedata['KnownPrimalBound'] != self.instancedata['KnownDualBound'], 'PrimalGap'] = np.nan;
@@ -279,7 +279,7 @@ class Paver :
             if self.hasSolveAttribute('DualBound') :
                 self.addSolveAttribute(None, None, None, 'DualGap', None);
                 
-                for sr, df in self.solvedata.iteritems() :
+                for sr, df in self.solvedata.items() :
                     df['DualGap'] = utils.computeGap(self.instancedata['Direction'] * self.instancedata['KnownDualBound'], (self.instancedata['Direction'] * df['DualBound']).fillna(-np.inf), tol = zerogaptol);
                     # only have dual gap if best dual bound is optimal
                     df.loc[self.instancedata['KnownPrimalBound'] != self.instancedata['KnownDualBound'], 'DualGap'] = np.nan;
@@ -314,7 +314,7 @@ class Paver :
                 result[i] = _mygapFloatFloat(a[i], b);
             return result;
         
-        for (instance, solver, run), solvetrace in self.solvetraces.iteritems() :
+        for (instance, solver, run), solvetrace in self.solvetraces.items() :
             
             # we need a time column
             if 'Time' not in solvetrace :
@@ -354,19 +354,19 @@ class Paver :
                 
                 time = row['Time'];
                 if not time >= lasttime :
-                    print 'Warning: Time running backwards in solvetrace for solver ' + solver + ' run ' + run + ' instance ' + instance + ': from ' + str(lasttime) + ' to ' + str(time) + ': Ignoring.';
+                    print('Warning: Time running backwards in solvetrace for solver ' + solver + ' run ' + run + ' instance ' + instance + ': from ' + str(lasttime) + ' to ' + str(time) + ': Ignoring.');
                     continue;
                 assert time >= lasttime;
                 
                 if 'PrimalBound' in row :
                     pb = row['PrimalBound'];
                     if not np.isnan(lastpb) and direction * pb > direction * lastpb and time != lasttime :
-                        print 'Warning: Primal bound worsen for solver', solver, 'run', run, 'instance', instance, 'from', lastpb, '(index', lastidx, 'time', lasttime, ')', 'to', pb, '(index', idx, 'time', time, ')';
+                        print('Warning: Primal bound worsen for solver', solver, 'run', run, 'instance', instance, 'from', lastpb, '(index', lastidx, 'time', lasttime, ')', 'to', pb, '(index', idx, 'time', time, ')');
 
                 if 'DualBound' in row :
                     db = row['DualBound'];
                     if not np.isnan(lastdb) and direction * db < direction * lastdb and time != lasttime :
-                        print 'Warning: Dual bound worsen for solver', solver, 'run', run, 'instance', instance, 'from', lastdb, '(index', lastidx, 'time', lasttime, ')', 'to', db, '(index', idx, 'time', time, ')';
+                        print('Warning: Dual bound worsen for solver', solver, 'run', run, 'instance', instance, 'from', lastdb, '(index', lastidx, 'time', lasttime, ')', 'to', db, '(index', idx, 'time', time, ')');
                 
                 if gapint is not None :
                     g = _mygapFloatFloat(lastpb, lastdb);
@@ -497,7 +497,7 @@ class Paver :
 
     def run(self) :
         '''Runs main PAVER machinery, that is finalizes and analyzes data.''' 
-        print 'finalizing data';
+        print('finalizing data');
         
         # run consistency checks
         self._consistencycheck = checkconsistency.ConsistencyCheck(self._setup.getConsistencyChecks(self));
@@ -516,16 +516,16 @@ class Paver :
         self._aggregateSolvedata();
         
         if len(self.aggrsolvedata.items) == 0 :
-            print 'No data, skipping calculations.'
+            print('No data, skipping calculations.')
             return;
 
         # compute solving statistics
-        print 'computing solve statistics';
+        print('computing solve statistics');
         self._solvestat = solvestat.StatisticsGenerator(self._setup.getMetrics(self));
         self._solvestat.calculate(self);
 
         # setup solvedata writer
-        print 'setting up solving data writer';
+        print('setting up solving data writer');
         self._solvedatawriter = writesolvedata.SolveDataWriter(self,
                                                                self._setup.getWriteSolveDataInstanceColumns(self),
                                                                self._setup.getWriteSolveDataRunColumns(self));
@@ -563,17 +563,17 @@ class Paver :
         
         # print raw instance and solve data
         raw = open(os.path.join(dirname, 'raw.txt'), 'w');
-        print >> raw, self.instancedata.to_string();
-        print >> raw, "\n";
-        print >> raw, self.solvedata.to_frame(filter_observations=False).to_string();
+        print(self.instancedata.to_string(), file=raw);
+        print("\n", file=raw);
+        print(self.solvedata.to_frame(filter_observations=False).to_string(), file=raw);
         if self.aggregated :
-            print >> raw, "\n", self.aggrsolvedata.to_frame(filter_observations=False).to_string();
+            print("\n", self.aggrsolvedata.to_frame(filter_observations=False).to_string(), file=raw);
         raw.close();
 
         # print options
         opts = open(os.path.join(dirname, 'options.txt'), 'w');
-        for name, value in self.options.iteritems() :
-            print >> opts, '{0:30s} {1:s}'.format(name, str(value));
+        for name, value in self.options.items() :
+            print('{0:30s} {1:s}'.format(name, str(value)), file=opts);
         opts.close();
 
         
@@ -589,22 +589,22 @@ class Paver :
         
         index = open(os.path.join(dirname, 'index.html'), 'w');
         
-        print >> index, '<HTML><HEAD>', self.htmlheader, '</HEAD><BODY>';
+        print('<HTML><HEAD>', self.htmlheader, '</HEAD><BODY>', file=index);
         
         #print >> index, '<h2>Performance Results</h2>';
-        print >> index, '<p>';
-        print >> index, 'Results written on', datetime.utcnow().ctime(), 'UTC', \
-        'using the <A href="http://www.gamsworld.org/performance/paver2/">PAVER 2 tools</A>.';
-        print >> index, '</p>';
-        print >> index, '<p>';
-        print >> index, '<A href=documentation.html>Documentation</A>'
-        print >> index, '</p>';
+        print('<p>', file=index);
+        print('Results written on', datetime.utcnow().ctime(), 'UTC', \
+        'using the <A href="http://www.gamsworld.org/performance/paver2/">PAVER 2 tools</A>.', file=index);
+        print('</p>', file=index);
+        print('<p>', file=index);
+        print('<A href=documentation.html>Documentation</A>', file=index)
+        print('</p>', file=index);
 
-        print >> index, '<HR>';
+        print('<HR>', file=index);
 
         if self.aggregated :
             # print solver and run names
-            print >> index, '<P>';
+            print('<P>', file=index);
             table = [HTML.TableRow(['Solver', 'Run'], header = True)];
             prevsolver = None;
             for solverrun in self.solvedata.items :
@@ -613,83 +613,83 @@ class Paver :
                     table.append([solver, run]);
                 else :
                     table.append(['', run]);
-            print >> index, HTML.Table(table);
-            print >> index, '</P>';
+            print(HTML.Table(table), file=index);
+            print('</P>', file=index);
         else :
             # print solver names
-            print >> index, '<P>';
+            print('<P>', file=index);
             table = [HTML.TableRow(['Solver'], header = True)];
             for solverrun in self.solvedata.items :
                 table.append([solverrun.split('@')[0]]);
-            print >> index, HTML.Table(table);
-            print >> index, '</P>';
+            print(HTML.Table(table), file=index);
+            print('</P>', file=index);
 
-        print >> index, '<P>';
-        print >> index, '<b>Number of Instances:</b>', len(self.instancedata.index);
+        print('<P>', file=index);
+        print('<b>Number of Instances:</b>', len(self.instancedata.index), file=index);
         # TODO could give some statistics on observed model types?
-        print >> index, '</P>'
+        print('</P>', file=index)
                 
         # print solve and instance data
         if self._solvedatawriter is not None :
             solvedata = open(os.path.join(dirname, 'solvedata.html'), 'w');
-            print >> solvedata, "<HTML>";
-            print >> solvedata, "<HEAD>", self.htmlheader, "</HEAD>";
-            print >> solvedata, "<BODY>";
+            print("<HTML>", file=solvedata);
+            print("<HEAD>", self.htmlheader, "</HEAD>", file=solvedata);
+            print("<BODY>", file=solvedata);
             self._solvedatawriter.writeHTML(self.solvedata, solvedata, dirname);
-            print >> solvedata, "</BODY>", "</HTML>";
+            print("</BODY>", "</HTML>", file=solvedata);
             solvedata.close();
-            print >> index, '<P><b><a href="solvedata.html">Detailed Instance and Solving Data</a></b></P>';
+            print('<P><b><a href="solvedata.html">Detailed Instance and Solving Data</a></b></P>', file=index);
 
         # print aggregated solve and instance data
         if self._solvedatawriter is not None and self.aggregated :
             solvedata = open(os.path.join(dirname, 'solvedataaggr.html'), 'w');
-            print >> solvedata, "<HTML>";
-            print >> solvedata, "<HEAD>", self.htmlheader, "</HEAD>";
-            print >> solvedata, "<BODY>";
+            print("<HTML>", file=solvedata);
+            print("<HEAD>", self.htmlheader, "</HEAD>", file=solvedata);
+            print("<BODY>", file=solvedata);
             self._solvedatawriter.writeHTML(self.aggrsolvedata, solvedata, dirname, 'aggr');
-            print >> solvedata, "</BODY>", "</HTML>";
+            print("</BODY>", "</HTML>", file=solvedata);
             solvedata.close();
-            print >> index, '<P><b><a href="solvedataaggr.html">Detailed Instance and Aggregated Solving Data</a></b></P>';
+            print('<P><b><a href="solvedataaggr.html">Detailed Instance and Aggregated Solving Data</a></b></P>', file=index);
 
         # print raw instance and (aggregated) solve data
         raw = open(os.path.join(dirname, 'raw.html'), 'w');
-        print >> raw, "<HTML><HEAD>", self.htmlheader, "</HEAD><BODY>";
-        print >> raw, "<P>", "Instance Data:<BR>", self.instancedata.to_html(), "</P>";
-        print >> raw, "<P>", "Solver Runs:<BR>", self.solvedata.to_frame(filter_observations=False).to_html(), "</P>";
+        print("<HTML><HEAD>", self.htmlheader, "</HEAD><BODY>", file=raw);
+        print("<P>", "Instance Data:<BR>", self.instancedata.to_html(), "</P>", file=raw);
+        print("<P>", "Solver Runs:<BR>", self.solvedata.to_frame(filter_observations=False).to_html(), "</P>", file=raw);
         if self.aggregated :
-            print >> raw, "<P>", "Aggregated Solver Runs:<BR>", self.aggrsolvedata.to_frame(filter_observations=False).to_html(), "</P>";
-        print >> raw, "</BODY>", "</HTML>";
+            print("<P>", "Aggregated Solver Runs:<BR>", self.aggrsolvedata.to_frame(filter_observations=False).to_html(), "</P>", file=raw);
+        print("</BODY>", "</HTML>", file=raw);
         #for (instance, solver, run), solvetrace in self.solvetraces.iteritems() :
         #    print >> raw, "Solvetrace (" + solver + "," + run + ") on instance " + instance;
         #    print >> raw, solvetrace.to_html();
         raw.close();
-        print >> index, '<P>(<a href=raw.html>Raw Data</a>)</P>';
+        print('<P>(<a href=raw.html>Raw Data</a>)</P>', file=index);
 
-        print >> index, '<HR>';
+        print('<HR>', file=index);
 
         # print solve statistics
         if self._solvestat is not None :
             
-            print >> index, '<P><b>Statistics</b>:'
-            print >> index, '<UL>';
+            print('<P><b>Statistics</b>:', file=index)
+            print('<UL>', file=index);
             categories = self._solvestat.getCategories();
             for c in categories :
                 ct = c.translate(None, ' ');
                 self._solvestat.writeHTML(self, c, dirname, "stat_" + ct);
-                print >> index, '<LI><a href="stat_' + ct + '.html">', c, '</a>';
+                print('<LI><a href="stat_' + ct + '.html">', c, '</a>', file=index);
                 
-            print >> index, '</UL></P>';
+            print('</UL></P>', file=index);
         
         # print options
-        print >> index, '<HR>'
-        print >> index, '<P>PAVER options:';
+        print('<HR>', file=index)
+        print('<P>PAVER options:', file=index);
         t = [];
-        for name, value in self.options.iteritems() :
+        for name, value in self.options.items() :
             t.append([name, value]);
-        print >> index, HTML.Table(t, attribs = {'class' : 'dataframe'}, col_align=['left', 'right']);
-        print >> index, '</P>';
+        print(HTML.Table(t, attribs = {'class' : 'dataframe'}, col_align=['left', 'right']), file=index);
+        print('</P>', file=index);
 
-        print >> index, '</BODY></HTML>';
+        print('</BODY></HTML>', file=index);
         index.close();
         
 
@@ -726,14 +726,14 @@ if __name__ == '__main__' :
     if sys.argv.count('--setup') :
         setuppos = sys.argv.index('--setup');
         if len(sys.argv) <= setuppos+1 :
-            print 'Missing argument for --setup option.'
+            print('Missing argument for --setup option.')
             sys.exit();
         setupfile = sys.argv[setuppos+1];
     else :
         setupfile = os.path.join(os.path.dirname(__file__), 'setupdefault.py');
     
-    print 'reading setup file', setupfile;
-    execfile(setupfile);
+    print('reading setup file', setupfile);
+    exec(compile(open(setupfile).read(), setupfile, 'exec'));
     setup = PaverSetup();  # pylint: disable=E0602
     
     paverparser = setupArgumentParser(setup);
@@ -743,22 +743,22 @@ if __name__ == '__main__' :
     
     # TODO ensure that solu files are read after all solver outcomes
     for f in args.file :
-        print 'reading', f;
+        print('reading', f);
         paver.read(f, **args.__dict__);
 
     for f in args.tracefile :
-        print 'reading GAMS trace file ', f;
+        print('reading GAMS trace file ', f);
         paver.read(f, extension = 'trc', **args.__dict__);
 
     for f in args.solufile :
-        print 'reading SCIP solution file ', f;
+        print('reading SCIP solution file ', f);
         paver.read(f, extension = 'solu', **args.__dict__);
     
     paver.run();
     
     if len(args.writehtml.strip()) > 0 :
-        print 'writing HTML output to', args.writehtml, '(this can take a while...)';
+        print('writing HTML output to', args.writehtml, '(this can take a while...)');
         paver.writeHTML(args.writehtml);
     if args.writetext is not None :
-        print 'writing text output to', args.writetext;
+        print('writing text output to', args.writetext);
         paver.writeText(args.writetext);

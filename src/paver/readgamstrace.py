@@ -105,8 +105,8 @@ SOLVERSTAT2TERMSTAT = {
 # pylint: enable=E1101
 
 if os.path.isfile('solverrename.py') :
-    print 'executing solver rename file solverrename.py'
-    execfile('solverrename.py');
+    print('executing solver rename file solverrename.py')
+    exec(compile(open('solverrename.py').read(), 'solverrename.py', 'exec'));
 else :
     solverrename = {}; # pylint: disable=C0103
 
@@ -200,7 +200,7 @@ def read(f, paver, **attribs) :
         colit = iter(cols);
         for r in line.split(',') :
             r = r.strip();
-            c = colit.next();
+            c = next(colit);
             if c in INTCOLS :
                 if r == "NA" or r == "UNDF" or r == "" or r.find('acr?') >= 0 :
                     pass;

@@ -51,7 +51,7 @@ def _calculateProfile(paver, data, minabscissa = None, maxabscissa = None, logab
     
     # compute profile data
     profile = pd.DataFrame(0, index = ticks, columns = data.columns);
-    for c, r in data.iteritems() :
+    for c, r in data.items() :
         # order ratios for solver c
         ordered = r.sort_values();
         pos = 0;
@@ -325,7 +325,7 @@ class StatisticsGenerator():
                 betterthanref = pd.DataFrame(index = fdf.index, columns = fdf.columns);
                 allreldiff = pd.DataFrame(index = fdf.index, columns = fdf.columns);
                 allabsdiff = pd.DataFrame(index = fdf.index, columns = fdf.columns);
-                for c, s in fdf.iteritems() :
+                for c, s in fdf.items() :
                     if metric.betterisup :
                         reldiff = utils.relDiff(fdf[refsolver], s);
                         absdiff = fdf[refsolver] - s;
@@ -434,11 +434,11 @@ class StatisticsGenerator():
         fdf = df[f].copy();
         
         if len(fdf.index) == 0 :
-           print 'No data left to evaluate attribute', metric.attribute, 'after applying filter "' + f.name + '". Skipping profiles.';
+           print('No data left to evaluate attribute', metric.attribute, 'after applying filter "' + f.name + '". Skipping profiles.');
            return
            
         if fdf.min().min() == fdf.max().max() :
-           print 'Attribute', metric.attribute, 'is the same for all instances and solvers after applying filter "' + f.name + '". Skipping profiles.';
+           print('Attribute', metric.attribute, 'is the same for all instances and solvers after applying filter "' + f.name + '". Skipping profiles.');
            return
     
         if metric.ppextended :
@@ -473,9 +473,9 @@ class StatisticsGenerator():
             # compute profile
             try :
                 extprofile = _calculateProfile(paver, ratiotoextbest, None, None, metric.pprelsemilog);
-            except BaseException, e :
-                print 'Could not generate extended performance profile for attribute', metric.attribute, 'filter', f.name;
-                print e;
+            except BaseException as e :
+                print('Could not generate extended performance profile for attribute', metric.attribute, 'filter', f.name);
+                print(e);
         
         # compute virtual best and worst
         if metric.multbydirection :
@@ -504,18 +504,18 @@ class StatisticsGenerator():
         if metric.ppabsolute :
             try :
                 absprofile = _calculateProfile(paver, fdf, None, None, metric.ppabssemilog);
-            except BaseException, e :
-                print 'Could not generate absolute performance profile for attribute', metric.attribute, 'filter', f.name;
-                print e;
+            except BaseException as e :
+                print('Could not generate absolute performance profile for attribute', metric.attribute, 'filter', f.name);
+                print(e);
     
         # compute relative profile
         if metric.pprelative :
             ratiotobest = fdf.div(fdfvirtbest, axis=0);
             try :
                 relprofile = _calculateProfile(paver, ratiotobest, None, None, metric.pprelsemilog);
-            except BaseException, e :
-                print 'Could not generate relative performance profile for attribute', metric.attribute, 'filter', f.name;
-                print e;
+            except BaseException as e :
+                print('Could not generate relative performance profile for attribute', metric.attribute, 'filter', f.name);
+                print(e);
     
         # store results in Outcome object
         outcome = self.Outcome(metric, f);
@@ -584,7 +584,7 @@ class StatisticsGenerator():
         '''Gets the metric categories of the computed solve statistics.''' 
         if self._results is None :
             return [];
-        return self._results.keys();
+        return list(self._results.keys());
     
     def writeText(self, category, outdir, fileprefix):
         '''Outputs statistics for a certain category in plain text form.'''
@@ -599,57 +599,57 @@ class StatisticsGenerator():
             #print >> out, "<TD>Filter:", outcome.filter.name, "</TD>";
             #print >> out, "</TABLE>"
             #print >> out, "</H4>";
-            print >> out, "Category:", category;
-            print >> out, "Attribute:", outcome.metric.attribute;
-            print >> out, "Filter:", outcome.filter.name;
+            print("Category:", category, file=out);
+            print("Attribute:", outcome.metric.attribute, file=out);
+            print("Filter:", outcome.filter.name, file=out);
             
             if outcome.stat is not None :
                 # output data dataframe into separate file
                 datafile = fileprefix + 'data{0:03d}'.format(count) + '.txt';
                 outdata = open(os.path.join(outdir, datafile), 'w');
-                print >> outdata, outcome.data.dropna(how='all').to_string(na_rep = "-",
-                                                                           index_names = False);
+                print(outcome.data.dropna(how='all').to_string(na_rep = "-",
+                                                                           index_names = False), file=outdata);
                 outdata.close();
 
                 # write statistics
-                print >> out, outcome.stat.transpose().to_string(na_rep = "-",
+                print(outcome.stat.transpose().to_string(na_rep = "-",
                                                                  index_names = False,
-                                                                 float_format = "{0:.2f}".format);
-                print >> out, "Data:", datafile;
+                                                                 float_format = "{0:.2f}".format), file=out);
+                print("Data:", datafile, file=out);
 
             # write performance profiles
             if outcome.pprofilerel is not None :
                 profilefile = fileprefix + 'profilerel{0:03d}'.format(count) + '.txt';
                 outdata = open(os.path.join(outdir, profilefile), 'w');
                 
-                print >> outdata, 'Relative performance profile for', outcome.metric.attribute;
-                print >> outdata, 'Filter:', outcome.filter.name;
-                print >> outdata, outcome.pprofilerel.to_string();
+                print('Relative performance profile for', outcome.metric.attribute, file=outdata);
+                print('Filter:', outcome.filter.name, file=outdata);
+                print(outcome.pprofilerel.to_string(), file=outdata);
 
-                print >> out, "Relative performance profile:", profilefile;
+                print("Relative performance profile:", profilefile, file=out);
 
             if outcome.pprofileabs is not None :
                 profilefile = fileprefix + 'profileabs{0:03d}'.format(count) + '.txt';
                 outdata = open(os.path.join(outdir, profilefile), 'w');
                 
-                print >> outdata, 'Absolute performance profile for', outcome.metric.attribute;
-                print >> outdata, 'Filter:', outcome.filter.name;
-                print >> outdata, outcome.pprofileabs.to_string();
+                print('Absolute performance profile for', outcome.metric.attribute, file=outdata);
+                print('Filter:', outcome.filter.name, file=outdata);
+                print(outcome.pprofileabs.to_string(), file=outdata);
 
-                print >> out, "Absolute performance profile:", profilefile;
+                print("Absolute performance profile:", profilefile, file=out);
                 
             if outcome.pprofileext is not None :
                 profilefile = fileprefix + 'profileext{0:03d}'.format(count) + '.txt';
                 outdata = open(os.path.join(outdir, profilefile), 'w');
                 
-                print >> outdata, 'Extended performance profile for', outcome.metric.attribute;
-                print >> outdata, 'Filter:', outcome.filter.name;
-                print >> outdata, outcome.pprofileext.to_string();
+                print('Extended performance profile for', outcome.metric.attribute, file=outdata);
+                print('Filter:', outcome.filter.name, file=outdata);
+                print(outcome.pprofileext.to_string(), file=outdata);
 
-                print >> out, "Extended performance profile:", profilefile;
+                print("Extended performance profile:", profilefile, file=out);
 
             # write comparison to reference solvers
-            for refsolver, refsolveroutcome in outcome.refsolver.iteritems() :
+            for refsolver, refsolveroutcome in outcome.refsolver.items() :
 
                 # output ratiodata into separate file
                 data = None;
@@ -674,20 +674,20 @@ class StatisticsGenerator():
                 
                     datafile = fileprefix + 'ratio{0:03d}_'.format(count) + str(refsolver).translate(None, " ()',") + '.txt';
                     outdata = open(os.path.join(outdir, datafile), 'w');
-                    print >> outdata, df.to_string();
+                    print(df.to_string(), file=outdata);
                     outdata.close();
                 
                 stat = refsolveroutcome['stat'].transpose().drop(refsolver, axis=1);
 
-                print >> out;
-                print >> out, "Relative to", refsolver, ":";
-                print >> out, stat.to_string(na_rep = "-",
-                                             float_format = "{0:.2f}".format);
+                print(file=out);
+                print("Relative to", refsolver, ":", file=out);
+                print(stat.to_string(na_rep = "-",
+                                             float_format = "{0:.2f}".format), file=out);
                 if data is not None :
-                    print >> out, 'Data:', datafile;
+                    print('Data:', datafile, file=out);
 
             count += 1;
-            print >> out;
+            print(file=out);
             
         out.close();
 
@@ -698,42 +698,42 @@ class StatisticsGenerator():
         bw = 'bw' in paver.options and paver.options['bw'];
         if bw :
             plotstyle = [];
-            for m in [''] + matplotlib.markers.MarkerStyle.markers.keys() :
-                if not isinstance(m, basestring) and m != 'None' :
+            for m in [''] + list(matplotlib.markers.MarkerStyle.markers.keys()) :
+                if not isinstance(m, str) and m != 'None' :
                     continue;
-                for ls in matplotlib.lines.lineStyles.keys() :
+                for ls in list(matplotlib.lines.lineStyles.keys()) :
                     if ls != 'None' and ls != ' ' :
                         plotstyle.append('k' + ls + str(m));
         else :
             plotstyle = '-o';
 
         out = open(os.path.join(outdir, fileprefix + '.html'), 'w');
-        print >> out, "<HTML>";
-        print >> out, "<HEAD>";
-        print >> out, paver.htmlheader;
-        print >> out, "<STYLE> .block {background:#f0f0f0; padding:10px; border: 1px solid #c2c2c2;} </STYLE>";
-        print >> out, "</HEAD>";
-        print >> out, "<BODY>";
+        print("<HTML>", file=out);
+        print("<HEAD>", file=out);
+        print(paver.htmlheader, file=out);
+        print("<STYLE> .block {background:#f0f0f0; padding:10px; border: 1px solid #c2c2c2;} </STYLE>", file=out);
+        print("</HEAD>", file=out);
+        print("<BODY>", file=out);
         
-        print >> out, "<H3>Statistics for category", category, "</H3>"
+        print("<H3>Statistics for category", category, "</H3>", file=out)
         
         # print table of contents
         count = 0;
         prevattr = '';
-        print >> out, "<P><TABLE><TR><TH align=left>Attribute</TH><TH align=left> Filter</TH></TR>"
+        print("<P><TABLE><TR><TH align=left>Attribute</TH><TH align=left> Filter</TH></TR>", file=out)
         for outcome in self._results[category] :
-            print >> out, "<TR>";
+            print("<TR>", file=out);
             if outcome.metric.attribute != prevattr :
-                print >> out, "<TD>", "<A href=#"+str(count)+">", outcome.metric.attribute, "</A>", '</TD>'
+                print("<TD>", "<A href=#"+str(count)+">", outcome.metric.attribute, "</A>", '</TD>', file=out)
             else :
-                print >> out, "<TD>&nbsp;</TD>";
+                print("<TD>&nbsp;</TD>", file=out);
             prevattr = outcome.metric.attribute;
-            print >> out, "<TD>", "<A href=#"+str(count)+">", outcome.filter.name, "</A>", "</TD>"
-            print >> out, "</TR>";
+            print("<TD>", "<A href=#"+str(count)+">", outcome.filter.name, "</A>", "</TD>", file=out)
+            print("</TR>", file=out);
             count += 1;
-        print >> out, "</TABLE></P>"
+        print("</TABLE></P>", file=out)
 
-        print >> out, "<P>For a short description on the computed values, refer to <A href=documentation.html>the documentation</A>.</P>";
+        print("<P>For a short description on the computed values, refer to <A href=documentation.html>the documentation</A>.</P>", file=out);
         
         count = 0;
         for outcome in self._results[category] :
@@ -743,29 +743,29 @@ class StatisticsGenerator():
             #print >> out, "<TD>Filter:", outcome.filter.name, "</TD>";
             #print >> out, "</TABLE>"
             #print >> out, "</H4>";
-            print >> out, "<div class='block'>";
-            print >> out, "<A name="+str(count)+">";
-            print >> out, "<H4>", outcome.metric.attribute, "<BR>";
-            print >> out, "Filter:", outcome.filter.name, "</H4>";
-            print >> out, "</A>";
+            print("<div class='block'>", file=out);
+            print("<A name="+str(count)+">", file=out);
+            print("<H4>", outcome.metric.attribute, "<BR>", file=out);
+            print("Filter:", outcome.filter.name, "</H4>", file=out);
+            print("</A>", file=out);
             
-            print >> out, "<P><FONT SIZE=-1>";
+            print("<P><FONT SIZE=-1>", file=out);
             if not np.isneginf(outcome.metric.clip_lower) or not np.isposinf(outcome.metric.clip_upper) :
-                print >> out, "Attribute values were projected onto interval [" + str(outcome.metric.clip_lower) + ', ' + str(outcome.metric.clip_upper) + '].<BR>';
+                print("Attribute values were projected onto interval [" + str(outcome.metric.clip_lower) + ', ' + str(outcome.metric.clip_upper) + '].<BR>', file=out);
             if outcome.metric.failvalue is not None :
-                print >> out, "Missing values and values for failed instances substituted by", outcome.metric.failvalue, ".<BR>";
+                print("Missing values and values for failed instances substituted by", outcome.metric.failvalue, ".<BR>", file=out);
             if outcome.metric.navalue is not None :
-                print >> out, "Missing values after filtering substituted by", outcome.metric.navalue, ".<BR>";
-            print >> out, "</FONT></P>" 
+                print("Missing values after filtering substituted by", outcome.metric.navalue, ".<BR>", file=out);
+            print("</FONT></P>", file=out) 
             
             if outcome.stat is not None :
                 # output data dataframe into separate file
                 datafile = fileprefix + 'data{0:03d}'.format(count) + '.html';
                 outdata = open(os.path.join(outdir, datafile), 'w');
-                print >> outdata, "<HTML><HEAD>", paver.htmlheader, "</HEAD><BODY>";
-                print >> outdata, outcome.data.dropna(how='all').to_html(na_rep = "-",
-                                                                         index_names = False);
-                print >> outdata, "</BODY>", "</HTML>";
+                print("<HTML><HEAD>", paver.htmlheader, "</HEAD><BODY>", file=outdata);
+                print(outcome.data.dropna(how='all').to_html(na_rep = "-",
+                                                                         index_names = False), file=outdata);
+                print("</BODY>", "</HTML>", file=outdata);
                 outdata.close();
 
                 # write statistics
@@ -773,13 +773,13 @@ class StatisticsGenerator():
                                                          index_names = False,
                                                          float_format = "{0:.2f}".format);
                 table = table.replace("<th>minor</th>", "<th></th>", 1).replace("<th></th>", "<th align=left><A href=" + datafile + ">Data</A></th>", 1);
-                print >> out, "<P>";
-                print >> out, table;
+                print("<P>", file=out);
+                print(table, file=out);
                 if 'sh.geom. mean' in outcome.stat :
-                    print >> out, "<FONT SIZE=-1>geometric mean shift:", outcome.metric.shift, "</FONT>";
-                print >> out, "</P>";
+                    print("<FONT SIZE=-1>geometric mean shift:", outcome.metric.shift, "</FONT>", file=out);
+                print("</P>", file=out);
                 
-                print >> out, "<P>";
+                print("<P>", file=out);
                 # if we have only a count, do a plot for this one (probably that's why we have this metric)
                 if (outcome.stat.columns == 'count').all() and len(outcome.refsolver) == 0 :
                     _barchart(outcome.stat['count'], bw = bw);
@@ -793,7 +793,7 @@ class StatisticsGenerator():
                             plt.savefig(os.path.join(outdir, plotfile + '.' + paver.options['figformat']));
                     plt.close();
                     
-                    print >> out, "<a href=" + plotfile + "." + paver.options['figformat'] + "><img src=" + plotfile + ".png width=300></a>";
+                    print("<a href=" + plotfile + "." + paver.options['figformat'] + "><img src=" + plotfile + ".png width=300></a>", file=out);
                 
                 # bar charts for each type of mean
                 if outcome.metric.means :
@@ -812,7 +812,7 @@ class StatisticsGenerator():
                                 plt.savefig(os.path.join(outdir, plotfile + '.' + paver.options['figformat']));
                         plt.close();
                         
-                        print >> out, "<a href=" + plotfile + "." + paver.options['figformat'] + "><img src=" + plotfile + ".png width=300></a>";
+                        print("<a href=" + plotfile + "." + paver.options['figformat'] + "><img src=" + plotfile + ".png width=300></a>", file=out);
                 
                 # boxplot
                 if outcome.metric.boxplot :
@@ -835,14 +835,14 @@ class StatisticsGenerator():
                             plt.savefig(os.path.join(outdir, plotfile + '.' + paver.options['figformat']));
                     plt.close();
                     
-                    print >> out, "<a href=" + plotfile + "." + paver.options['figformat'] + "><img src=" + plotfile + ".png width=300></a>";
+                    print("<a href=" + plotfile + "." + paver.options['figformat'] + "><img src=" + plotfile + ".png width=300></a>", file=out);
 
-                print >> out, "</P>";
+                print("</P>", file=out);
 
             # plot performance profiles
             haveprof = outcome.pprofilerel is not None or outcome.pprofileabs is not None or outcome.pprofileext is not None;
             if haveprof :
-                print >> out, "<P>";
+                print("<P>", file=out);
             
             if outcome.pprofilerel is not None :
                 plt.figure();
@@ -861,7 +861,7 @@ class StatisticsGenerator():
                         plt.savefig(os.path.join(outdir, plotfile + '.' + paver.options['figformat']));
                 plt.close();
 
-                print >> out, "<a href=" + plotfile + "." + paver.options['figformat'] + "><img src=" + plotfile + ".png width=300></a>";
+                print("<a href=" + plotfile + "." + paver.options['figformat'] + "><img src=" + plotfile + ".png width=300></a>", file=out);
 
             if outcome.pprofileabs is not None :
                 plt.figure();
@@ -880,7 +880,7 @@ class StatisticsGenerator():
                         plt.savefig(os.path.join(outdir, plotfile + '.' + paver.options['figformat']));
                 plt.close();
 
-                print >> out, "<a href=" + plotfile + "." + paver.options['figformat'] + "><img src=" + plotfile + ".png width=300></a>";
+                print("<a href=" + plotfile + "." + paver.options['figformat'] + "><img src=" + plotfile + ".png width=300></a>", file=out);
 
             if outcome.pprofileext is not None :
                 plt.figure();
@@ -899,12 +899,12 @@ class StatisticsGenerator():
                         plt.savefig(os.path.join(outdir, plotfile + '.' + paver.options['figformat']));
                 plt.close();
 
-                print >> out, "<a href=" + plotfile + "." + paver.options['figformat'] + "><img src=" + plotfile + ".png width=300></a>";
+                print("<a href=" + plotfile + "." + paver.options['figformat'] + "><img src=" + plotfile + ".png width=300></a>", file=out);
 
             if haveprof :
-                print >> out, "</P>";
+                print("</P>", file=out);
                             
-            for refsolver, refsolveroutcome in outcome.refsolver.iteritems() :
+            for refsolver, refsolveroutcome in outcome.refsolver.items() :
 
                 # output ratiodata into separate file
                 data = None;
@@ -929,9 +929,9 @@ class StatisticsGenerator():
                 
                     datafile = fileprefix + 'ratio{0:03d}_'.format(count) + str(refsolver).translate(None, " ()',") + '.html';
                     outdata = open(os.path.join(outdir, datafile), 'w');
-                    print >> outdata, "<HTML><HEAD>", paver.htmlheader, "</HEAD><BODY>";
-                    print >> outdata, df.to_html(index_names = False, escape = False);
-                    print >> outdata, "</BODY>", "</HTML>";
+                    print("<HTML><HEAD>", paver.htmlheader, "</HEAD><BODY>", file=outdata);
+                    print(df.to_html(index_names = False, escape = False), file=outdata);
+                    print("</BODY>", "</HTML>", file=outdata);
                     outdata.close();
                 
                 stat = refsolveroutcome['stat'].transpose().drop(refsolver, axis=1);
@@ -942,18 +942,18 @@ class StatisticsGenerator():
                 if data is not None :
                     table = table.replace("<th>minor</th>", "<th></th>", 1).replace("<th></th>", "<th align=left><A href=" + datafile + ">Data</A></th>", 1);
                 
-                print >> out, "<P>";
-                print >> out, "Performance with respect to ", refsolver + ":", "<BR>";
-                print >> out, "<FONT SIZE=-1>Tolerance:";
+                print("<P>", file=out);
+                print("Performance with respect to ", refsolver + ":", "<BR>", file=out);
+                print("<FONT SIZE=-1>Tolerance:", file=out);
                 if outcome.metric.reltol is not None :
-                    print >> out, "relative", outcome.metric.reltol;
+                    print("relative", outcome.metric.reltol, file=out);
                 if outcome.metric.abstol is not None :
-                    print >> out, "absolute", outcome.metric.abstol;
-                print >> out, "</FONT><BR>";
-                print >> out, table;
-                print >> out, "</P>";
+                    print("absolute", outcome.metric.abstol, file=out);
+                print("</FONT><BR>", file=out);
+                print(table, file=out);
+                print("</P>", file=out);
                 
-                print >> out, "<P>";
+                print("<P>", file=out);
                 # boxplot
                 if outcome.metric.boxplot and data is not None:
                     plt.clf();
@@ -975,7 +975,7 @@ class StatisticsGenerator():
                             plt.savefig(os.path.join(outdir, plotfile + '.' + paver.options['figformat']));
                     plt.close();
                     
-                    print >> out, "<a href=" + plotfile + "." + paver.options['figformat'] + "><img src=" + plotfile + ".png width=300></a>";
+                    print("<a href=" + plotfile + "." + paver.options['figformat'] + "><img src=" + plotfile + ".png width=300></a>", file=out);
 
                 # bar charts for each type of mean
                 if outcome.metric.means :
@@ -994,7 +994,7 @@ class StatisticsGenerator():
                                 plt.savefig(os.path.join(outdir, plotfile + '.' + paver.options['figformat']));
                         plt.close();
                         
-                        print >> out, "<a href=" + plotfile + "." + paver.options['figformat'] + "><img src=" + plotfile + ".png width=300></a>";
+                        print("<a href=" + plotfile + "." + paver.options['figformat'] + "><img src=" + plotfile + ".png width=300></a>", file=out);
 
                 # bar charts for number of instance close to/better than/worse than refsolver
                 for a in ['close', 'better', 'worse'] :
@@ -1018,12 +1018,12 @@ class StatisticsGenerator():
                                 plt.savefig(os.path.join(outdir, plotfile + '.' + paver.options['figformat']));
                         plt.close();
                         
-                        print >> out, "<a href=" + plotfile + "." + paver.options['figformat'] + "><img src=" + plotfile + ".png width=300></a>";
+                        print("<a href=" + plotfile + "." + paver.options['figformat'] + "><img src=" + plotfile + ".png width=300></a>", file=out);
 
-                print >> out, "</P>";
+                print("</P>", file=out);
 
             count += 1;
-            print >> out, "</div><BR>";
+            print("</div><BR>", file=out);
 
-        print >> out, "</BODY>", "</HTML>";
+        print("</BODY>", "</HTML>", file=out);
         out.close();

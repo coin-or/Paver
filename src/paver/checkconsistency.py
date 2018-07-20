@@ -12,7 +12,8 @@ class CheckTerminationStatus :
         
     def __call__(self, paver):
         count = 0;
-        for _, df in paver.solvedata.items() :
+        for i in paver.solvedata.items :
+            df = paver.solvedata[i];
             #failed = df['TerminationStatus'].isin(self._badstatus);
             for s in self._badstatus :
                 if np.isnan(s) :
@@ -48,7 +49,8 @@ class CheckBounds :
         if paver.hasSolveAttribute('PrimalBound') and paver.hasInstanceAttribute('KnownDualBound') :
             # fill missing bound data by -inf
             #paver.instancedata['KnownDualBound'] = paver.instancedata['KnownDualBound'].fillna(-paver.instancedata['Direction'] * np.inf);
-            for _, df in paver.solvedata.items() :
+            for i in paver.solvedata.items :
+                df = paver.solvedata[i];
                 # get instances with primal bounds
                 dfpb = df; #.dropna(subset = ['PrimalBound']);
                 
@@ -70,7 +72,8 @@ class CheckBounds :
         if not self.ignoredb and paver.hasSolveAttribute('DualBound') and paver.hasInstanceAttribute('KnownPrimalBound') :
             # fill missing bound data by +inf
             #paver.instancedata['KnownPrimalBound'] = paver.instancedata['KnownPrimalBound'].fillna(paver.instancedata['Direction'] * np.inf);
-            for _, df in paver.solvedata.items() :
+            for i in paver.solvedata.items :
+                df = paver.solvedata[i];
                 # get instances with dual bound
                 dfdb = df; #.dropna(subset = ['DualBound']);
                 
@@ -89,10 +92,12 @@ class CheckBounds :
                 
         # compare primal and dual bounds of solvers among each other
         if not self.ignoredb and paver.hasSolveAttribute('PrimalBound') and paver.hasSolveAttribute('DualBound') :
-            for sr1, df1 in paver.solvedata.items() :
+            for sr1 in paver.solvedata.items :
+                df1 = paver.solvedata[sr1];
                 # get instances with dual bound in solver 1
                 #df1 = df1.dropna(subset = ['DualBound']).convert_objects(convert_numeric=True);
-                for sr2, df2 in paver.solvedata.items() :
+                for sr2 in paver.solvedata.items :
+                    df2 = paver.solvedata[sr2];
                     # get instances with primal bound in solver 2
                     #df2 = df2.dropna(subset = ['PrimalBound']).convert_objects(convert_numeric=True);
                                         
@@ -137,7 +142,8 @@ class CheckExaminer :
                 'DualCompSlack'   : self._slacktol
               }
         
-        for _, df in paver.solvedata.items() :
+        for i in paver.solvedata.items :
+            df = paver.solvedata[i];
             for attrib in list(tol.keys()) :
                 if not paver.hasSolveAttribute(attrib) :
                     continue;

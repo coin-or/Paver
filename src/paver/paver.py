@@ -243,7 +243,8 @@ class Paver :
         direction = self.instancedata['Direction'];
         knownpbs = self.instancedata['KnownPrimalBound'];
         
-        for sr, df in self.solvedata.items() :
+        for sr in self.solvedata.items :
+            df = self.solvedata[sr];
             solverfails = df['Fail'];
             solverpbs = df['PrimalBound'];
             for i, solverpb in solverpbs.items() :
@@ -262,7 +263,8 @@ class Paver :
             self.addSolveAttribute(None, None, None, 'Gap', None);
             #self.solvedata[self.solvedata.items[0]]['Gap'][self.solvedata.major_axis[0]] = 42;
             
-            for sr, df in self.solvedata.items() :
+            for sr in self.solvedata.items :
+                df = self.solvedata[sr];
                 df['Gap'] = utils.computeGap(self.instancedata['Direction'] * df['PrimalBound'], self.instancedata['Direction'] * df['DualBound'], tol = zerogaptol);
                 self.solvedata[sr] = df;
                 
@@ -270,7 +272,8 @@ class Paver :
             if self.hasSolveAttribute('PrimalBound') :
                 self.addSolveAttribute(None, None, None, 'PrimalGap', None);
                 
-                for sr, df in self.solvedata.items() :
+                for sr in self.solvedata.items :
+                    df = self.solvedata[sr];
                     df['PrimalGap'] = utils.computeGap((self.instancedata['Direction'] * df['PrimalBound']).fillna(np.inf), self.instancedata['Direction'] * self.instancedata['KnownPrimalBound'], tol = zerogaptol);
                     # only have primal gap if best primal bound is optimal
                     df.loc[self.instancedata['KnownPrimalBound'] != self.instancedata['KnownDualBound'], 'PrimalGap'] = np.nan;
@@ -279,7 +282,8 @@ class Paver :
             if self.hasSolveAttribute('DualBound') :
                 self.addSolveAttribute(None, None, None, 'DualGap', None);
                 
-                for sr, df in self.solvedata.items() :
+                for sr in self.solvedata.items :
+                    df = self.solvedata[sr];
                     df['DualGap'] = utils.computeGap(self.instancedata['Direction'] * self.instancedata['KnownDualBound'], (self.instancedata['Direction'] * df['DualBound']).fillna(-np.inf), tol = zerogaptol);
                     # only have dual gap if best dual bound is optimal
                     df.loc[self.instancedata['KnownPrimalBound'] != self.instancedata['KnownDualBound'], 'DualGap'] = np.nan;

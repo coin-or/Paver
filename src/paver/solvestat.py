@@ -262,7 +262,7 @@ class StatisticsGenerator():
                 #    if part2 > part1 + 1e-9 :
                 #        stat['geom. std.'] = np.nan;
                 #    return 0.0;
-                stat['geom. std.'] = np.exp(np.sqrt(part1 - part2));
+                stat['geom. std.'] = np.exp(np.sqrt((part1 - part2).clip(lower = 0.0)));
                 stat['geom. std.'][part2 > part1].fillna(0.0);
                 
             # compute shifted geometric mean, if shift is given
@@ -274,7 +274,7 @@ class StatisticsGenerator():
                 part1 = np.square(fdflog).mean();
                 part2 = np.square(fdflogmean);
                 
-                stat['sh.geom. std.'] = np.exp(np.sqrt(part1 - part2));
+                stat['sh.geom. std.'] = np.exp(np.sqrt((part1 - part2).clip(lower = 0.0)));
                 stat['sh.geom. std.'][part2 > part1].fillna(0.0);
 
         # compute quantiles

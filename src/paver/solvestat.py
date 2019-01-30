@@ -427,10 +427,10 @@ class StatisticsGenerator():
             f = pd.Series(True, index = df.index);
             f.name = "all instances";
     
-        # print f.name, f.count();
+        # print(f.name, f.count());
         
         # apply filter
-        fdf = df[f].copy();
+        fdf = df[f].dropna(how = 'all');
         
         if len(fdf.index) == 0 :
             print('No data left to evaluate attribute', metric.attribute, 'after applying filter "' + f.name + '". Skipping profiles.');

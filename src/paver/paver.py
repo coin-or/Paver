@@ -159,7 +159,7 @@ class Paver :
                 self.instancedata[attrname][instance] = attrvalue;
             elif not self.options['nocheckinstanceattr'] :
                 # already have an entry, assert that we try to set to the same value
-                assert self.instancedata[attrname][instance] == attrvalue;
+                assert self.instancedata[attrname][instance] == attrvalue, "Existing entry %s=%s for instance %s conflicts with new entry %s" % (attrname, str(self.instancedata[attrname][instance]), instance, str(attrvalue));
 
     def hasSolveAttribute(self, attrname) :
         '''Indicates whether a given solve attribute is known to PAVER.'''

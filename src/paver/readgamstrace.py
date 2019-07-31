@@ -201,7 +201,11 @@ def read(f, paver, **attribs) :
         for r in line.split(',') :
             r = r.strip();
             c = next(colit);
-            if c in INTCOLS :
+            if c == "TerminationStatus" and r in TerminationStatus.__dict__ :
+               record[c] = TerminationStatus.__dict__[r];
+            elif c == "SolutionStatus" and r in SolutionStatus.__dict__ :
+               record[c] = SolutionStatus.__dict__[r];
+            elif c in INTCOLS :
                 if r == "NA" or r == "UNDF" or r == "" or r.find('acr?') >= 0 :
                     pass;
                 else :

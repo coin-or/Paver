@@ -490,7 +490,7 @@ class Paver :
         if extension is None :
             raise BaseException('Cannot determine file format for file ' + filename);
 
-        if extension == 'trc' or extension == 'pav' :
+        if extension == 'trc' or extension == 'pav' or extension == 'exm' :
             readgamstrace.read(f, self, **attribs);
         elif extension == 'solu' :
             readscipsolu.read(f, self, **attribs);

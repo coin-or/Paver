@@ -85,8 +85,8 @@
 		<!--                                                           -->
 		<!--Fill in your text below (outside the comment block).       -->
 
-		<projectLicense>Eclipse Public License 1.0</projectLicense>
-		<projectLicenseURL>http://www.eclipse.org/legal/epl-v10.html</projectLicenseURL>
+		<projectLicense>Eclipse Public License 2.0 (with GPL 3 as secondary license)</projectLicense>
+		<projectLicenseURL>http://www.eclipse.org/legal/epl-v20.html</projectLicenseURL>
 
 		<!-- Below, you can list other COIN projects your project      -->
 		<!-- depends on. These are listed one by one, as in the        -->

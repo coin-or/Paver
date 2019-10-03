@@ -214,6 +214,7 @@ class PaverSetup :
             filterminmaxtime = None;
 
         # get instances with a certain minimal (max) solving time and no fail and known optimal value
+        filterminmaxtimeknownopt = None
         if filterallnofailknownopt is not None and filterminmaxtime is not None :
             filterminmaxtimeknownopt = filterminmaxtime & filterallnofailknownopt;
             filterminmaxtimeknownopt.name = 'time >= ' + str(paver.options['filtertime']) + ' by at least one solver and no fail for all solvers and known optimal value';

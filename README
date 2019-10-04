@@ -19,6 +19,9 @@ Requirements:
 The following versions seem to work:
   Python 3.6.6, Numpy 1.14.5, matplotlib 2.2.2, Pandas 0.23.1
 
+ATTENTION: Pandas >= 0.25 does not work.
+(Paver uses Pandas' Panel, which was removed with Pandas 0.25.)
+
 For help on usage, execute:
   python ./src/paver/paver.py -h
 

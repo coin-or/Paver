@@ -228,6 +228,12 @@ def read(f, paver, **attribs) :
             continue;
 
         instanceid = record['InputFileName'];
+        if instanceid.endswith('.gz') :
+           instanceid = instanceid[:-3]
+        if instanceid.endswith('.bz2') :
+           instanceid = instanceid[:-4]
+        if instanceid.endswith('.gms') :
+           instanceid = instanceid[:-4]
         if solvername is None :
             solverid = record['SolverName'];
         else :

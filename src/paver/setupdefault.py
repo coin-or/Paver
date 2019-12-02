@@ -624,7 +624,7 @@ class PaverSetup :
 
         for attrib in ['PrimalVarInfeas', 'DualVarInfeas', 'PrimalConInfeas', 'DualConInfeas', 'PrimalCompSlack', 'DualCompSlack'] :
             if paver.hasSolveAttribute(attrib) and valsbyattr[attrib].max() > 0.0 :
-                defaultruncolumns.append(writesolvedata.ExaminerColumn(plot = self._dataplots, plotcap = 10.0));
+                defaultruncolumns.append(writesolvedata.ExaminerColumn(plot = self._dataplots, plotcap = 10.0, primaltol = paver.options['ccfeastol'], dualtol = paver.options['ccopttol'], slacktol = paver.options['ccopttol']));
                 break;
         
         return defaultruncolumns;

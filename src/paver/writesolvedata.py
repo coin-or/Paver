@@ -380,7 +380,17 @@ class ExaminerColumn(SolveDataColumn) :
             self._format = attribs['format'];
         else :
             self._format = 'e';
-                
+
+        # collect which violation-attribs to look for
+        # only take those where there is also a tolerance (regarding which was probably checked)
+        self._exmattribs = [];
+        if 'primaltol' in attribs and attribs['primaltol'] < np.inf :
+           self._exmattribs += ['PrimalVarInfeas', 'PrimalConInfeas']
+        if 'dualtol' in attribs and attribs['dualtol'] < np.inf :
+           self._exmattribs += ['DualVarInfeas', 'DualConInfeas']
+        if 'slacktol' in attribs and attribs['slacktol'] < np.inf :
+           self._exmattribs += ['PrimalCompSlack', 'DualCompSlack']
+
     def getWidth(self) :
         '''Returns column width.'''
         if self._format == 'e' :
@@ -404,7 +414,7 @@ class ExaminerColumn(SolveDataColumn) :
         # pylint: disable=W0613
         maxinfeas = -np.inf;
         maxinfeasattrib = None;
-        for attrib in ['PrimalVarInfeas', 'DualVarInfeas', 'PrimalConInfeas', 'DualConInfeas', 'PrimalCompSlack', 'DualCompSlack'] :
+        for attrib in self._exmattribs :
             if attrib not in data[solverrun] :
                 continue;
             infeas = data[solverrun][attrib][instance];
@@ -421,7 +431,7 @@ class ExaminerColumn(SolveDataColumn) :
         '''Returns table cell content as number (to generate plots).'''
         # pylint: disable=W0613,R0201
         maxinfeas = -np.inf;
-        for attrib in ['PrimalVarInfeas', 'DualVarInfeas', 'PrimalConInfeas', 'DualConInfeas', 'PrimalCompSlack', 'DualCompSlack'] :
+        for attrib in self._exmattribs :
             if attrib not in data[solverrun] :
                 continue;
             infeas = data[solverrun][attrib][instance];
